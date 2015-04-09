@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- black -->
+  <color name="black">#000000</color>
+  <!-- white -->
+  <color name="white">#FFFFFF</color>
+  <!-- red -->
+  <color name="red">#FF0000</color>
+   <!-- grey 128,128,128-->
+  <color name="gray">#808080</color>
+  <!-- 石板灰色  112,128,144-->
+  <color name="slateGray">#708090</color>
+  <color name="darkblue">#00008B</color><!--暗蓝色 -->
+</resources>

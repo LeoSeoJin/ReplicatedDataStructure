@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, MainActivity!</string>
+    <string name="app_name">Game</string>
+    <string name="level">Level:</string>
+     <string name="level2">Level</string>
+    <string name="selectPictureArea">Select Picture</string>
+    <string name="playpuzzle">Play</string>
+    <string name="confirm">OK</string>
+    <string name="backtohome">Home</string>
+    <string name="startgame">Start Game</string>
+    <string name="exitgame">Exit Game</string>
+    <string name="specification">Specification</string>
+    <string name="exit">Exit</string>
+    <string name="preview">Preview</string>
+    <string name="stepNum">Steps</string>
+    <string name="time">Time</string>
+    <string name="success">Succeed!</string>
+    <string name="play">PLAY</string>
+    <string name="rePlay">REPLAY</string>
+    <string name="action_settings">action_settings</string>
+    <string-array name="levelArray">
+      <item>---------------3X3----------------</item>
+      <item>---------------4X4----------------</item>
+      <item>---------------5X5----------------</item>
+    </string-array>
+</resources>
