@@ -10,6 +10,8 @@
     <string name="backtohome">Home</string>
     <string name="startgame">Start Game</string>
     <string name="exitgame">Exit Game</string>
+    <string name ="wifihot">WifiHot Manager</string>
+    <string name ="createhot">Create WifiHot</string>
     <string name="specification">Specification</string>
     <string name="exit">Exit</string>
     <string name="preview">Preview</string>

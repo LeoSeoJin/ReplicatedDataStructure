@@ -1,9 +1,5 @@
 package com.example.puzzle;
 
-import java.io.File;
-import java.util.ArrayList;
-
-import com.example.puzzle.R;
 import org.worldsproject.puzzle.PuzzleView;
 import org.worldsproject.puzzle.enums.Difficulty;
 
@@ -28,6 +24,7 @@ public class GameActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		//ActivityManager.getInstance().addActivity(GameActivity.this);
 		setContentView(R.layout.puzzle);
 		initControls();
 	}
@@ -100,7 +97,7 @@ public class GameActivity extends Activity {
 	private void exitThisActivity(){	
 		AlertDialog.Builder builder = new AlertDialog.Builder(GameActivity.this);
 		builder.setIcon(R.drawable.question_dialog_icon);
-		builder.setTitle("Exit");
+		builder.setTitle("Back");
 		builder.setMessage("Are you sure to back to reselect level and picture£¿");
 		builder.setPositiveButton(R.string.confirm,
 				new DialogInterface.OnClickListener() {

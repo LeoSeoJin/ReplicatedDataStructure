@@ -861,14 +861,17 @@ containing a value of this type.
         public static final int abc_split_action_bar_is_narrow=0x7f070002;
     }
     public static final class color {
-        public static final int abc_search_url_text_holo=0x7f080009;
+        public static final int abc_search_url_text_holo=0x7f08000a;
         public static final int abc_search_url_text_normal=0x7f080000;
         public static final int abc_search_url_text_pressed=0x7f080002;
         public static final int abc_search_url_text_selected=0x7f080001;
         /**  black 
          */
         public static final int black=0x7f080003;
-        public static final int darkblue=0x7f080008;
+        /**  菊兰色 
+         */
+        public static final int cadetblue=0x7f080008;
+        public static final int darkblue=0x7f080009;
         /**  grey 128,128,128
          */
         public static final int gray=0x7f080006;
@@ -1149,41 +1152,49 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f060016;
         public static final int action_menu_presenter=0x7f060017;
         public static final int action_mode_close_button=0x7f060024;
-        public static final int action_settings=0x7f060044;
+        public static final int action_settings=0x7f06004e;
         public static final int activity_chooser_view_content=0x7f060025;
         public static final int always=0x7f06000b;
         public static final int beginning=0x7f060011;
         public static final int checkbox=0x7f06002d;
         public static final int collapseActionView=0x7f06000d;
+        public static final int createHot=0x7f060041;
+        public static final int createHotLayout=0x7f060040;
         public static final int default_activity_button=0x7f060028;
         public static final int dialog=0x7f06000e;
         public static final int disableHome=0x7f060008;
         public static final int dropdown=0x7f06000f;
         public static final int edit_query=0x7f060030;
         public static final int end=0x7f060013;
-        public static final int exit_button=0x7f060043;
+        public static final int exit_button=0x7f06004b;
         public static final int expand_activities_button=0x7f060026;
         public static final int expanded_menu=0x7f06002c;
-        public static final int gridItem_imgView=0x7f060040;
+        public static final int gridItem_imgView=0x7f060047;
         public static final int home=0x7f060014;
         public static final int homeAsUp=0x7f060005;
+        public static final int hotLevel=0x7f06004d;
+        public static final int hotName=0x7f06004c;
+        public static final int hotTitle=0x7f06003c;
+        public static final int hotTitleName=0x7f06003d;
         public static final int icon=0x7f06002a;
         public static final int ifRoom=0x7f06000a;
         public static final int image=0x7f060027;
+        public static final int listHots=0x7f06003f;
         public static final int listMode=0x7f060001;
         public static final int list_item=0x7f060029;
-        public static final int main_confirm_btn=0x7f06003e;
-        public static final int main_level_spinner=0x7f06003c;
-        public static final int main_picture_gridView=0x7f06003d;
-        public static final int main_return_btn=0x7f06003f;
+        public static final int main_confirm_btn=0x7f060045;
+        public static final int main_level_spinner=0x7f060043;
+        public static final int main_picture_gridView=0x7f060044;
+        public static final int main_return_btn=0x7f060046;
         public static final int middle=0x7f060012;
         public static final int never=0x7f060009;
         public static final int none=0x7f060010;
         public static final int normal=0x7f060000;
         public static final int progress_circular=0x7f060018;
         public static final int progress_horizontal=0x7f060019;
-        public static final int puzzleView=0x7f060041;
+        public static final int puzzleView=0x7f060048;
         public static final int radio=0x7f06002f;
+        public static final int scanHots=0x7f06003e;
         public static final int search_badge=0x7f060032;
         public static final int search_bar=0x7f060031;
         public static final int search_button=0x7f060033;
@@ -1199,13 +1210,15 @@ containing a value of this type.
         public static final int showHome=0x7f060004;
         public static final int showTitle=0x7f060006;
         public static final int split_action_bar=0x7f06001e;
-        public static final int start_button=0x7f060042;
+        public static final int start_button=0x7f060049;
         public static final int submit_area=0x7f060039;
         public static final int tabMode=0x7f060002;
         public static final int title=0x7f06002b;
         public static final int top_action_bar=0x7f060020;
         public static final int up=0x7f060021;
         public static final int useLogo=0x7f060003;
+        public static final int wifi_button=0x7f06004a;
+        public static final int wifi_home=0x7f060042;
         public static final int withText=0x7f06000c;
     }
     public static final class integer {
@@ -1258,11 +1271,13 @@ containing a value of this type.
         public static final int abc_search_dropdown_item_icons_2line=0x7f030015;
         public static final int abc_search_view=0x7f030016;
         public static final int abc_simple_decor=0x7f030017;
-        public static final int activity_main=0x7f030018;
-        public static final int grid_item=0x7f030019;
-        public static final int puzzle=0x7f03001a;
-        public static final int start_interface=0x7f03001b;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001c;
+        public static final int actiivty_wifihotlist=0x7f030018;
+        public static final int activity_main=0x7f030019;
+        public static final int grid_item=0x7f03001a;
+        public static final int puzzle=0x7f03001b;
+        public static final int start_interface=0x7f03001c;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001d;
+        public static final int wifihot_layout=0x7f03001e;
     }
     public static final class menu {
         public static final int main=0x7f0e0000;
@@ -1422,25 +1437,27 @@ containing a value of this type.
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abc_shareactionprovider_share_with_application=0x7f0b000b;
-        public static final int action_settings=0x7f0b001f;
+        public static final int action_settings=0x7f0b0021;
         public static final int app_name=0x7f0b000e;
         public static final int backtohome=0x7f0b0014;
         public static final int confirm=0x7f0b0013;
-        public static final int exit=0x7f0b0018;
+        public static final int createhot=0x7f0b0018;
+        public static final int exit=0x7f0b001a;
         public static final int exitgame=0x7f0b0016;
         public static final int hello=0x7f0b000d;
         public static final int level=0x7f0b000f;
         public static final int level2=0x7f0b0010;
-        public static final int play=0x7f0b001d;
+        public static final int play=0x7f0b001f;
         public static final int playpuzzle=0x7f0b0012;
-        public static final int preview=0x7f0b0019;
-        public static final int rePlay=0x7f0b001e;
+        public static final int preview=0x7f0b001b;
+        public static final int rePlay=0x7f0b0020;
         public static final int selectPictureArea=0x7f0b0011;
-        public static final int specification=0x7f0b0017;
+        public static final int specification=0x7f0b0019;
         public static final int startgame=0x7f0b0015;
-        public static final int stepNum=0x7f0b001a;
-        public static final int success=0x7f0b001c;
-        public static final int time=0x7f0b001b;
+        public static final int stepNum=0x7f0b001c;
+        public static final int success=0x7f0b001e;
+        public static final int time=0x7f0b001d;
+        public static final int wifihot=0x7f0b0017;
     }
     public static final class style {
         /** 

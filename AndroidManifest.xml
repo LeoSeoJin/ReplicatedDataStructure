@@ -9,10 +9,12 @@
         android:targetSdkVersion="21" />
 
     <application
+        android:name="com.example.puzzle.network.wifi.WifiApplication"
         android:allowBackup="true"
         android:icon="@drawable/flag"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+       
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -22,20 +24,30 @@
             android:name=".GameActivity"
             android:label="@string/app_name" >
         </activity>
+        
+        <activity 
+            android:name=".WifiHotActivity"
+            android:label="@string/app_name" >
+        </activity>
+        
         <activity
             android:name=".StartInterface"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
     </application>
     <supports-screens 
            android:largeScreens="true"  
             android:normalScreens="true" 
             android:smallScreens="true"  
             android:anyDensity="true"/>
+    
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" /> 
 
 </manifest>

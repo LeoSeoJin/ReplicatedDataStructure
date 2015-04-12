@@ -158,7 +158,7 @@ public class Puzzle {
 			output.write(puzzleData);
 			output.close();
 		} catch (FileNotFoundException e) {
-			Toast.makeText(context, context.getText(R.string.sdcard_error), Toast.LENGTH_LONG).show();
+			//Toast.makeText(context, context.getText(R.string.sdcard_error), Toast.LENGTH_LONG).show();
 		}
 	}
 
