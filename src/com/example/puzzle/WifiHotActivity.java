@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 
 import java.util.List;
+import java.util.Random;
 
 import com.example.puzzle.network.wifi.WifiApplication;
 import com.example.puzzle.network.wifi.WifiHotAdapter;
@@ -35,10 +36,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class WifiHotActivity extends Activity implements WifiBroadCastOperations {
-	
-
 	private static String TAG = "WifiHotActivity";
-
+	private static final Random RAN = new Random();
+	
 	private Button wifiHotBtn;		
 	private Button scanHotsBtn;
 	private Button wifiHome;
@@ -68,7 +68,7 @@ public class WifiHotActivity extends Activity implements WifiBroadCastOperations
 		wifiHotBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				wifiHotM.startAWifiHot("Snow");
+				wifiHotM.startAWifiHot("Puzzle");
 				initServer();
 			}
 		});
@@ -218,7 +218,7 @@ public class WifiHotActivity extends Activity implements WifiBroadCastOperations
 	}
 
 	private void initServer() {
-		server = SocketServer.newInstance(12345, new ServerMsgListener() {
+		server = SocketServer.newInstance(Global.PORT, new ServerMsgListener() {
 			Message msg = null;
 
 			@Override
@@ -246,7 +246,7 @@ public class WifiHotActivity extends Activity implements WifiBroadCastOperations
 
 	// client 
 	private void initClient(String IP) {
-		client = SocketClient.newInstance("192.168.43.1", 12345, new ClientMsgListener() {
+		client = SocketClient.newInstance("192.168.43.1", Global.PORT, new ClientMsgListener() {
 
 			Message msg = null;
 
@@ -296,6 +296,8 @@ public class WifiHotActivity extends Activity implements WifiBroadCastOperations
 		app.server = this.server;
 		app.wifiHotM = this.wifiHotM;
 		Log.i(TAG, "out saveData() app client ="+app.client);
+		Log.i(TAG, "out saveData() app server ="+app.server);
+		Log.i(TAG, "out saveData() app wifiHotM ="+app.wifiHotM);
 	}
 
 	private void initServerHandler() {

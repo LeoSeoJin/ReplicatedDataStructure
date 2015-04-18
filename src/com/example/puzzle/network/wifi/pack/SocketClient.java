@@ -41,6 +41,7 @@ public class SocketClient {
 			socketClient = new SocketClient(site, port, clientListener);
 		}
 		Log.i(TAG, "socketClient =" + socketClient);
+		
 		return socketClient;
 	}
 
@@ -92,10 +93,14 @@ public class SocketClient {
 							// out.println(JsonUtil.obj2Str(msg));
 							out.flush();
 						}
+						Thread.sleep(1000);
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
 					Log.d(TAG, "client snedMsg error!");
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}).start();
@@ -120,11 +125,17 @@ public class SocketClient {
 				while (onGoinglistner) {
 					if (client != null) {
 						if (client.isConnected()) {
+							if (client.isInputShutdown()) 
+								Log.i(TAG,"client's input shut down");
 							if (!client.isInputShutdown()) {
 								try {
 									in = new BufferedReader(new InputStreamReader(client.getInputStream(), "UTF-8"));
 									String chatMsg = in.readLine();
-									Log.i(TAG, "into acceptMsg()  chatMsg =" + chatMsg);
+									Log.i(TAG, "into acceptMsg()  Msg =" + chatMsg);
+									if (chatMsg == null) 
+										Log.i(TAG,"accept null msg");
+									if (chatMsg.equals(""))
+										Log.i(TAG,"msg is null");
 									if (chatMsg != null && !chatMsg.equals("")) {
 										clientListener.handlerHotMsg(chatMsg);
 									}

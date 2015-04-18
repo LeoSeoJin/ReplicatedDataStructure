@@ -523,7 +523,7 @@ int string action_settings 0x7f0b0021
 int string app_name 0x7f0b000e
 int string backtohome 0x7f0b0014
 int string confirm 0x7f0b0013
-int string createhot 0x7f0b0018
+int string createhot 0x7f0b0019
 int string exit 0x7f0b001a
 int string exitgame 0x7f0b0016
 int string hello 0x7f0b000d
@@ -534,12 +534,12 @@ int string playpuzzle 0x7f0b0012
 int string preview 0x7f0b001b
 int string rePlay 0x7f0b0020
 int string selectPictureArea 0x7f0b0011
-int string specification 0x7f0b0019
+int string specification 0x7f0b0017
 int string startgame 0x7f0b0015
 int string stepNum 0x7f0b001c
 int string success 0x7f0b001e
 int string time 0x7f0b001d
-int string wifihot 0x7f0b0017
+int string wifihot 0x7f0b0018
 int style AppBaseTheme 0x7f0c008d
 int style AppTheme 0x7f0c008e
 int style TextAppearance_AppCompat_Base_CompactMenu_Dialog 0x7f0c0063
@@ -681,8 +681,8 @@ int style Widget_AppCompat_PopupMenu 0x7f0c002b
 int style Widget_AppCompat_ProgressBar 0x7f0c000a
 int style Widget_AppCompat_ProgressBar_Horizontal 0x7f0c0009
 int style Widget_AppCompat_Spinner_DropDown_ActionBar 0x7f0c0022
-int style btn_font_34_black 0x7f0c008c
-int style font_40_white_bold 0x7f0c008b
+int style btn_font_60_black 0x7f0c008c
+int style font_20_white_bold 0x7f0c008b
 int[] styleable ActionBar { 0x7f010025, 0x7f010026, 0x7f010027, 0x7f010028, 0x7f010029, 0x7f01002a, 0x7f01002b, 0x7f01002c, 0x7f01002d, 0x7f01002e, 0x7f01002f, 0x7f010030, 0x7f010031, 0x7f010032, 0x7f010033, 0x7f010034, 0x7f010035, 0x7f010036, 0x7f010037 }
 int styleable ActionBar_background 10
 int styleable ActionBar_backgroundSplit 12

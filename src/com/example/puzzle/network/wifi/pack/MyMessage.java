@@ -5,6 +5,7 @@ public class MyMessage {
 	private String msg;
 	private String deviceName;
 	private String msgTime;
+	private String type;
 
 	public String getMsgTime() {
 		return msgTime;
@@ -14,6 +15,14 @@ public class MyMessage {
 		this.msgTime = msgTime;
 	}
 
+	public String getType() {
+		return type;
+	}
+	
+	public void setType(String type) {
+		this.type = type;
+	}
+	
 	public String getDeviceName() {
 		return deviceName;
 	}

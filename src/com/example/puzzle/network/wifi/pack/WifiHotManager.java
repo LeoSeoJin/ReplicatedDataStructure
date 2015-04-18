@@ -12,7 +12,7 @@ import android.os.Handler;
 import android.util.Log;
 
 public class WifiHotManager {
-	public static String TAG = WifiHotManager.class.getName();
+	public static String TAG = "WifiHotManager";
 
 	private WifiHotAdmin wifiApadmin;
 
@@ -113,10 +113,12 @@ public class WifiHotManager {
 			return;
 		}
 		if (!wifiIsOpen()) {
+			Log.d(TAG, "!wifi is not open");
 			registerWifiStateBroadcast(SSID);
 			wifiStateReceiver.setOpType(OpretionsType.CONNECT);
 			openWifi();
 		} else {
+			Log.d(TAG, "connectToHotPot else");//
 			enableNetwork(SSID, password);
 		}
 	}
@@ -142,12 +144,14 @@ public class WifiHotManager {
 			@Override
 			public void run() {
 				WifiConfiguration config = WifiHotConfigAdmin.createWifiNoPassInfo(SSID, password);
+				//WifiConfiguration config = WifiHotConfigAdmin.createWifiWpaInfo(SSID, password);
 				isConnecting = connectHotSpot(config);
 				registerWifiConnectBroadCast();
 				mSSID = SSID;
+				//while (!isConnecting) {
 				if (!isConnecting) {
-					operations.disPlayWifiConResult(false, null);
 					Log.i(TAG, "into enableNetwork(WifiConfiguration wifiConfig) isConnecting =" + isConnecting);
+					operations.disPlayWifiConResult(false, null);
 					return;
 				}
 			}
@@ -227,8 +231,11 @@ public class WifiHotManager {
 
 	private void registerWifiConnectBroadCast() {
 		if (wifiConnectReceiver == null) {
+			Log.i(TAG, "wifiConnectReceiver is null");
 			wifiConnectReceiver = new WifiConnectBroadCast(operations);
 		}
+		Log.i(TAG, "wifiConnectReceiver is not null");
+		
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
 		context.registerReceiver(wifiConnectReceiver, filter);

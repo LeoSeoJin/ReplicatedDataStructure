@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
@@ -25,6 +26,8 @@ import android.view.animation.Animation.AnimationListener;
 
 public class PuzzleView extends View implements OnGestureListener,
 		OnDoubleTapListener, OnScaleGestureListener, AnimationListener {
+	private static final String TAG = "PuzzleView";
+	
 	private Puzzle puzzle;
 	private GestureDetector gesture;
 	private ScaleGestureDetector scaleGesture;
@@ -33,6 +36,8 @@ public class PuzzleView extends View implements OnGestureListener,
 	private float scale = 1.0f;
 	private Difficulty difficulty;
 	private Context context;
+	private int[] x_array;
+	private int[] y_array;
 	
 	public PuzzleView(Context context) {
 		super(context);
@@ -51,18 +56,41 @@ public class PuzzleView extends View implements OnGestureListener,
 	}
 	
 	public void loadPuzzle(Bitmap image, Difficulty difficulty, String location) {
+		Log.i(TAG, "into load puzzle");
+		
 		gesture = new GestureDetector(this.getContext(), this);
-		scaleGesture = new ScaleGestureDetector(this.getContext(), this);
-
+		scaleGesture = new ScaleGestureDetector(this.getContext(), this);		
+		
 		puzzle = new PuzzleGenerator(this.getContext()).generatePuzzle(
 				this.getContext(), image, difficulty, location);
 		puzzle.savePuzzle(getContext(), location, true);
+		
+		Log.i(TAG, "out load puzzle");
 		
 		Piece.resetSerial();
 		
 		this.difficulty = difficulty;
 	}
 
+
+	public void loadPuzzle(Bitmap image, Difficulty difficulty, String location, int[] x_array, int[] y_array) {
+		Log.i(TAG, "into load puzzle");
+		
+		gesture = new GestureDetector(this.getContext(), this);
+		scaleGesture = new ScaleGestureDetector(this.getContext(), this);		
+		
+		puzzle = new PuzzleGenerator(this.getContext()).generatePuzzle(
+				this.getContext(), image, difficulty, location);
+		puzzle.savePuzzle(getContext(), location, true);
+		
+		Log.i(TAG, "out load puzzle");
+		
+		Piece.resetSerial();
+		
+		this.difficulty = difficulty;
+		
+	}
+	
 	public void loadPuzzle(String location) {
 		gesture = new GestureDetector(this.getContext(), this);
 		scaleGesture = new ScaleGestureDetector(this.getContext(), this);
@@ -79,10 +107,12 @@ public class PuzzleView extends View implements OnGestureListener,
 
 	@Override
 	public void onDraw(Canvas canvas) {
-
+		Log.i(TAG,"**********call ondraw");
+		
 		if (firstDraw) {
 			firstDraw = false;
-			puzzle.shuffle(this.getWidth(), this.getHeight());
+			//puzzle.shuffle(this.getWidth(), this.getHeight());
+			puzzle.shuffle(x_array,y_array);
 		}
 		canvas.scale(scale, scale);
 		puzzle.draw(canvas);
@@ -311,4 +341,21 @@ public class PuzzleView extends View implements OnGestureListener,
 		// TODO Auto-generated method stub
 		context = activity;
 	}
+	
+	public Puzzle getPuzzle() {
+		return puzzle;
+	}
+
+	public void setXarray(int[] x_array) {
+		this.x_array = new int[x_array.length];
+		for (int i = 0; i < x_array.length; i++) 
+			this.x_array[i] = x_array[i];
+	}
+
+	public void setYarray(int[] y_array) {
+		this.y_array = new int[y_array.length];
+		for (int i = 0; i < y_array.length; i++) 
+			this.y_array[i] = y_array[i];
+	}
+
 }

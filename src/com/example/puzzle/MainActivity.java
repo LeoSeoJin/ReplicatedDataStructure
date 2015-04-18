@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import com.example.puzzle.R;
 import com.example.puzzle.network.wifi.WifiApplication;
+import com.example.puzzle.network.wifi.pack.MessageService;
 import com.example.puzzle.network.wifi.pack.MyMessage;
 import com.example.puzzle.network.wifi.pack.SocketClient.ClientMsgListener;
 import com.example.puzzle.network.wifi.pack.SocketServer.ServerMsgListener;
@@ -35,6 +37,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class MainActivity extends Activity {
 	private static final String TAG = "MainActivity";
+	private static final Random RAN = new Random();
 	
 	private int screenWidth=0;
     private int screenHeight=0;
@@ -50,6 +53,7 @@ public class MainActivity extends Activity {
 	private Handler serverHandler;
 	private Handler clientHandler;
 	private boolean isReceivedMsg = false;
+	private MessageService msgService;
 	public List<MyMessage> Messages = new ArrayList<MyMessage>();
 	
 	private static final int[] pictureArray={R.drawable.model0,R.drawable.model1,R.drawable.model2,
@@ -58,6 +62,8 @@ public class MainActivity extends Activity {
 
 	private int pictureIndex = 0;
 	private int level = 0;
+	private int[] x_array;
+	private int[] y_array;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +73,7 @@ public class MainActivity extends Activity {
         deviceName = new Build().MODEL;
         deviceIp = "192.168.43.1";
         app = (WifiApplication) this.getApplication();
+        msgService = new MessageService(app, deviceName, deviceIp);
         initControls();
     	
     	initServerHandler();
@@ -78,6 +85,7 @@ public class MainActivity extends Activity {
     }
     
     private void initControls(){
+    	Log.i(TAG,"initialControls");
     	levelSp=(Spinner)findViewById(R.id.main_level_spinner);
     	pictureGridView=(GridView)findViewById(R.id.main_picture_gridView);
     	pictureGridView.setOnItemClickListener(new ItemClickListener());//监听
@@ -93,18 +101,21 @@ public class MainActivity extends Activity {
     	confBtn.setOnClickListener(btnOnClickListener);
     	returnBtn=(Button)findViewById(R.id.main_return_btn);
     	returnBtn.setOnClickListener(btnOnClickListener);
+       	
+    	/*when back from other activity, initial it to false*/
+    	isReceivedMsg = false;
     }
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
 		if(keyCode==KeyEvent.KEYCODE_BACK){
-			 exitApp();
-			 return true;
+			exitApp();
+			return true;
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-
+	
 	private void showGridView(){
 		 //获取屏幕大小
 		DisplayMetrics dm = new DisplayMetrics();
@@ -190,16 +201,23 @@ public class MainActivity extends Activity {
 			switch (v.getId()) {
 			case R.id.main_confirm_btn:
 				/*send the level and picture_index to the companion*/
-				sendMsg(structChatMessage(levelSp.getSelectedItemPosition()+" "+pictureIndex));
-						
+				if (!isReceivedMsg) {
+					level = levelSp.getSelectedItemPosition();
+					randomCoordinate(getRowCol(level));
+					msgService.sendMsg(msgService.structMessage("level_picture", levelSp.getSelectedItemPosition(), pictureIndex));
+					msgService.sendMsg(msgService.structMessage("coordinate", x_array, y_array));
+					//sendMsg(structMessage("levle", levelSp.getSelectedItemPosition()));
+					//sendMsg(structMessage("picture", pictureIndex));
+					//sendMsg(structMessage("xcoordinate", x_array));
+					//sendMsg(structMessage("ycoordinate", y_array));
+				}
+										
 				Bundle extras=new Bundle();
 				
-				if(!isReceivedMsg) 
-					extras.putInt("level", levelSp.getSelectedItemPosition());
-				else 
-					extras.putInt("level", level);
-				
+				extras.putInt("level", level);
 				extras.putInt("puzzle", pictureIndex);
+				extras.putIntArray("xcoordinate", x_array);
+				extras.putIntArray("ycoordinate", y_array);
 				
 				Intent intent=new Intent(MainActivity.this, GameActivity.class);
 				intent.putExtras(extras);
@@ -215,7 +233,28 @@ public class MainActivity extends Activity {
 		}
 	};	
 	
+	private int getRowCol(int l) {
+		if (l == 0) 
+			return 3;
+		else if (l == 4)
+			return 4;
+		else 
+			return 5;
+	}
 	
+	protected void randomCoordinate(int rowCol) {
+		x_array = new int[rowCol*rowCol];
+		y_array = new int[rowCol*rowCol];
+		int maxX = screenWidth - 20;
+		int maxY = screenHeight - 20;
+
+		for (int i = 0; i < x_array.length; i++) {
+			x_array[i] = RAN.nextInt(maxX);
+			y_array[i] = RAN.nextInt(maxY);
+		}
+	}
+
+	/*************
 	private void sendMsg(String msg) {
 		Log.i(TAG, "into sendMsg(Message msg) msg =" + msg);
 		if (app.server != null) {
@@ -226,15 +265,44 @@ public class MainActivity extends Activity {
 		Log.i(TAG, "out sendMsg(Message msg) msg =" + msg);
 	}
 	
-	private String structChatMessage(String text) {
+	private String structMessage(String type, int t1, int t2) {
 		MyMessage msg = new MyMessage();
+		msg.setType(type);
 		msg.setDeviceName(deviceName);
 		msg.setNetAddress(deviceIp);
-		msg.setMsg(text);
+		msg.setMsg(Integer.toString(t1)+" "+Integer.toString(t2));
+		gson = new Gson();
+		return gson.toJson(msg);
+	}
+	
+	private String structMessage(String type, int text) {
+		MyMessage msg = new MyMessage();
+		msg.setType(type);
+		msg.setDeviceName(deviceName);
+		msg.setNetAddress(deviceIp);
+		msg.setMsg(Integer.toString(text));
 		gson = new Gson();
 		return gson.toJson(msg);
 	}
 
+	private String structMessage(String type, int[] array) {
+		MyMessage msg = new MyMessage();
+		msg.setType(type);
+		msg.setDeviceName(deviceName);
+		msg.setNetAddress(deviceIp);
+
+		StringBuffer text = new StringBuffer("");
+		for (int p: array) {
+			text.append(p);
+			text.append(" ");
+		}
+		msg.setMsg(text.toString());
+		
+		gson = new Gson();
+		return gson.toJson(msg);
+	}
+	*****************/
+	
 	private void initServerListener() {
 		if (app.server == null) {
 			return;
@@ -295,7 +363,7 @@ public class MainActivity extends Activity {
 			public void handleMessage(Message msg) {
 				Log.i(TAG, "into initServerHandler() handleMessage(Message msg)");
 				String text = (String) msg.obj;
-				sendMsg(text);
+				msgService.sendMsg(text);
 				gson = new Gson();
 				MyMessage Msg = gson.fromJson(text, MyMessage.class);
 				Messages.add(Msg);
@@ -316,17 +384,64 @@ public class MainActivity extends Activity {
 				String text = (String) msg.obj;
 				gson = new Gson();
 				MyMessage Msg = gson.fromJson(text, MyMessage.class);
+				Log.i(TAG,"hadle message "+Msg);
 				Messages.add(Msg);
 				
-				/*get the information of level and picture_index*/
-				String[] level_picture = new String[2];
-				level_picture = Msg.getMsg().split(" ");
-				level = Integer.parseInt(level_picture[0]);
-				pictureIndex = Integer.parseInt(level_picture[1]);
+				/*get the information*/
 				isReceivedMsg = true;
-				
-				Log.i(TAG, "**********************level "+level+" index "+pictureIndex);	
-				
+				if (Msg.getType().equals("level_picture")) {
+					Log.i(TAG,"receiving level_picture");
+					String[] temp = new String[2];
+					temp = Msg.getMsg().split("_");
+					level = Integer.parseInt(temp[0]);
+					pictureIndex = Integer.parseInt(temp[1]);
+				}
+				if (Msg.getType().equals("coordinate")) {
+					Log.i(TAG, "receiving coordinate");
+					String[] coordinate = new String[2];
+					coordinate = Msg.getMsg().split("_");
+					
+					String[] xCoordinate = new String[getRowCol(level)*getRowCol(level)];
+					xCoordinate = coordinate[0].split(" ");
+					x_array = new int[xCoordinate.length];
+					for (int i = 0; i < x_array.length; i++) {
+						x_array[i] = Integer.parseInt(xCoordinate[i]);
+					}	
+					String[] yCoordinate = new String[getRowCol(level)*getRowCol(level)];
+					yCoordinate = coordinate[1].split(" ");
+					y_array = new int[yCoordinate.length];
+					for (int i = 0; i < y_array.length; i++) {
+						y_array[i] = Integer.parseInt(yCoordinate[i]);
+					}
+
+				}
+		
+				/****
+				if (Msg.getType().equals("level")) 
+					level = Integer.parseInt(Msg.getMsg());
+				if (Msg.getType().equals("picture"))
+					pictureIndex = Integer.parseInt(Msg.getMsg());
+				if (Msg.getType().equals("xcoordinate")) {
+					Log.i(TAG, "receiving x coordinate");
+					
+					String[] temp = new String[getRowCol(level)*getRowCol(level)];
+					temp = Msg.getMsg().split(" ");
+					x_array = new int[temp.length];
+					for (int i = 0; i < x_array.length; i++) {
+						x_array[i] = Integer.parseInt(temp[i]);
+					}
+				}
+				if (Msg.getType().equals("ycoordinate")){
+					Log.i(TAG, "receiving y coordinate");
+					
+					String[] temp = new String[getRowCol(level)*getRowCol(level)];
+					temp = Msg.getMsg().split(" ");
+					y_array = new int[temp.length];
+					for (int i = 0; i < y_array.length; i++) {
+						y_array[i] = Integer.parseInt(temp[i]);
+					}
+				}
+				*****/
 				Log.i(TAG, "into initClientHandler() handleMessage(Message msg) chatMessage =" + Msg);
 			}
 		};

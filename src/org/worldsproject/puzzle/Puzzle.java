@@ -23,9 +23,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.util.Log;
 import android.widget.Toast;
 
 public class Puzzle {
+	private static final String TAG = "Puzzle";
 	private static final Random RAN = new Random();
 
 	private final ArrayList<Piece> pieces = new ArrayList<Piece>();
@@ -68,6 +70,15 @@ public class Puzzle {
 		}
 	}
 
+	public void shuffle(int[] x_array, int[] y_array) {
+		Log.i(TAG, "pieces.size "+pieces.size());
+		for (int i = 0; i < this.pieces.size(); i++) {
+			pieces.get(i).setX(x_array[i]);
+			pieces.get(i).setY(y_array[i]);
+		}
+		
+	}
+	
 	public void shuffle(int display_width, int display_height) {
 		int maxX = display_width - 20;
 		int maxY = display_height - 20;

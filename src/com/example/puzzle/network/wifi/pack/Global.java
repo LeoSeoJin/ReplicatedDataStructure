@@ -12,6 +12,8 @@ public class Global {
 
 	public static String PASSWORD = "2012110312123";
 
+	public static int PORT = 8080;
+	
 	public static int WIFICIPHER_NOPASS = 1;
 
 	public static int WIFICIPHER_WEP = 2;

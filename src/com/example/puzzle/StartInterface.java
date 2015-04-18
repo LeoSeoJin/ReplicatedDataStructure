@@ -1,8 +1,5 @@
 package com.example.puzzle;
 
-import com.example.puzzle.network.wifi.WifiAdmin;
-import com.example.puzzle.network.wifi.pack.WifiHotManager;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;

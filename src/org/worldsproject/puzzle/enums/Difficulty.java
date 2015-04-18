@@ -39,6 +39,24 @@ public enum Difficulty {
 			return 25;
 	}
 	
+	public int getRow() {
+		if (this == EASY) 
+			return 3;
+		else if (this == MEDIUM) 
+			return 4;
+		else 
+			return 5;		
+	}
+	
+	public int getCol() {
+		if (this == EASY) 
+			return 3;
+		else if (this == MEDIUM) 
+			return 4;
+		else 
+			return 5;			
+	}
+	
 	public static Difficulty getEnumFromString(String e) {
 		if (e.equals("easy"))
 			return EASY;

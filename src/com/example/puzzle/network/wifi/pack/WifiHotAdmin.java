@@ -114,7 +114,7 @@ public class WifiHotAdmin {
 
 	private WifiConfiguration createPassHotWifiConfig(String mSSID, String mPasswd) {
 
-		Log.i(TAG, "out createPassHotWifiConfig SSID =" + mSSID + " password =" + mPasswd);
+		Log.i(TAG, "into createPassHotWifiConfig SSID =" + mSSID + " password =" + mPasswd);
 		WifiConfiguration config = new WifiConfiguration();
 		config.allowedAuthAlgorithms.clear();
 		config.allowedGroupCiphers.clear();

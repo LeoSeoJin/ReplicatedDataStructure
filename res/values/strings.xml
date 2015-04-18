@@ -10,9 +10,9 @@
     <string name="backtohome">Home</string>
     <string name="startgame">Start Game</string>
     <string name="exitgame">Exit Game</string>
-    <string name ="wifihot">WifiHot Manager</string>
-    <string name ="createhot">Create WifiHot</string>
     <string name="specification">Specification</string>
+    <string name="wifihot">WifiHot Manager</string>
+    <string name="createhot">Create WifiHot</string>
     <string name="exit">Exit</string>
     <string name="preview">Preview</string>
     <string name="stepNum">Steps</string>
@@ -22,8 +22,9 @@
     <string name="rePlay">REPLAY</string>
     <string name="action_settings">action_settings</string>
     <string-array name="levelArray">
-      <item>---------------3X3----------------</item>
-      <item>---------------4X4----------------</item>
-      <item>---------------5X5----------------</item>
+      <item>------3X3------</item>
+      <item>------3X4------</item>
+      <item>------4X3------</item>
+      <item>------4X4------</item>
     </string-array>
 </resources>

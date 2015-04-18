@@ -1441,7 +1441,7 @@ containing a value of this type.
         public static final int app_name=0x7f0b000e;
         public static final int backtohome=0x7f0b0014;
         public static final int confirm=0x7f0b0013;
-        public static final int createhot=0x7f0b0018;
+        public static final int createhot=0x7f0b0019;
         public static final int exit=0x7f0b001a;
         public static final int exitgame=0x7f0b0016;
         public static final int hello=0x7f0b000d;
@@ -1452,12 +1452,12 @@ containing a value of this type.
         public static final int preview=0x7f0b001b;
         public static final int rePlay=0x7f0b0020;
         public static final int selectPictureArea=0x7f0b0011;
-        public static final int specification=0x7f0b0019;
+        public static final int specification=0x7f0b0017;
         public static final int startgame=0x7f0b0015;
         public static final int stepNum=0x7f0b001c;
         public static final int success=0x7f0b001e;
         public static final int time=0x7f0b001d;
-        public static final int wifihot=0x7f0b0017;
+        public static final int wifihot=0x7f0b0018;
     }
     public static final class style {
         /** 
@@ -1690,10 +1690,10 @@ containing a value of this type.
         public static final int Widget_AppCompat_Spinner_DropDown_ActionBar=0x7f0c0022;
         /**  按钮  字体大小：22dip，颜色：黑色，左右间距：17dip 
          */
-        public static final int btn_font_34_black=0x7f0c008c;
+        public static final int btn_font_60_black=0x7f0c008c;
         /**  字体大小：20dip，颜色：白色，粗体 
          */
-        public static final int font_40_white_bold=0x7f0c008b;
+        public static final int font_20_white_bold=0x7f0c008b;
     }
     public static final class styleable {
         /**  ============================================ 

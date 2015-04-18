@@ -32,6 +32,7 @@ public class SocketServer {
 		if (serverSocket == null) {
 			serverSocket = new SocketServer(port, serverListener);
 		}
+		Log.i(TAG, "socketServer =" + serverSocket);
 		Log.i(TAG, "out newInstance(int port, ServerMsgListener serverListener)...................................");
 		return serverSocket;
 	}

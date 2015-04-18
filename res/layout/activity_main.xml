@@ -20,7 +20,7 @@
 	          android:layout_width="wrap_content"
 	          android:layout_height="wrap_content"
 	          android:text="@string/level"
-	          style="@style/font_40_white_bold"/>
+	          style="@style/font_20_white_bold"/>
 	        <Spinner
 	          android:id="@+id/main_level_spinner"
 	          android:layout_width="wrap_content"
@@ -35,7 +35,7 @@
 	           android:layout_width="fill_parent"
 	           android:layout_height="wrap_content"
 	           android:text="@string/selectPictureArea"
-	           style="@style/font_40_white_bold"
+	           style="@style/font_20_white_bold"
 	           android:paddingLeft="6px"
 	           android:background="@color/slateGray"/>
 	        <GridView
@@ -54,24 +54,22 @@
 	    <RelativeLayout
 	        android:layout_width="fill_parent"
 	        android:layout_height="fill_parent"
-	        android:layout_weight="6.0"
+	        android:layout_weight="6"
 	        android:paddingBottom="1px">
 		    <Button
 		       android:id="@+id/main_confirm_btn"
 		       android:layout_width="wrap_content"
 		       android:layout_height="wrap_content"
 		       android:layout_marginLeft="350px"
-		       android:layout_marginTop="30px"
 		       android:text="@string/playpuzzle"
-		       style="@style/btn_font_34_black"/>
+		       style="@style/btn_font_60_black"/>
 		    <Button
 		       android:id="@+id/main_return_btn"
 		       android:layout_width="wrap_content"
 		       android:layout_height="wrap_content"
-		       android:layout_marginTop="30px"
 		       android:layout_toRightOf="@id/main_confirm_btn"
 		       android:text="@string/backtohome"
-		       style="@style/btn_font_34_black"/>	       
+		       style="@style/btn_font_60_black"/>	       
 	    </RelativeLayout>
     </LinearLayout>
 </LinearLayout>
