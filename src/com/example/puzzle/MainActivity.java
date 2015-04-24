@@ -6,8 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.worldsproject.puzzle.enums.Difficulty;
+
 import com.example.puzzle.R;
 import com.example.puzzle.network.wifi.WifiApplication;
+import com.example.puzzle.network.wifi.pack.ConsoleMessage;
+import com.example.puzzle.network.wifi.pack.Global;
 import com.example.puzzle.network.wifi.pack.MessageService;
 import com.example.puzzle.network.wifi.pack.MyMessage;
 import com.example.puzzle.network.wifi.pack.SocketClient.ClientMsgListener;
@@ -35,9 +39,12 @@ import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements ConsoleMessage{
 	private static final String TAG = "MainActivity";
 	private static final Random RAN = new Random();
+	
+	private final String deviceName = Global.DEVICENAME;
+	private final String deviceIp = Global.IP;
 	
 	private int screenWidth=0;
     private int screenHeight=0;
@@ -46,9 +53,8 @@ public class MainActivity extends Activity {
 	private Button confBtn;
 	private Button returnBtn;
 	
+	private Difficulty x;
 	private WifiApplication app;
-	private String deviceName;
-	private String deviceIp;
 	private Gson gson;
 	private Handler serverHandler;
 	private Handler clientHandler;
@@ -69,9 +75,8 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //ActivityManager.getInstance().addActivity(MainActivity.this);
+        Log.i(TAG,"onCreate");
         setContentView(R.layout.activity_main);
-        deviceName = new Build().MODEL;
-        deviceIp = "192.168.43.1";
         app = (WifiApplication) this.getApplication();
         msgService = new MessageService(app, deviceName, deviceIp);
         initControls();
@@ -117,7 +122,6 @@ public class MainActivity extends Activity {
 	}
 	
 	private void showGridView(){
-		 //获取屏幕大小
 		DisplayMetrics dm = new DisplayMetrics();
         dm = this.getApplicationContext().getResources().getDisplayMetrics();
         screenWidth = dm.widthPixels;
@@ -201,6 +205,7 @@ public class MainActivity extends Activity {
 			switch (v.getId()) {
 			case R.id.main_confirm_btn:
 				/*send the level and picture_index to the companion*/
+				Log.i(TAG,"isReceivedMsg "+isReceivedMsg);
 				if (!isReceivedMsg) {
 					level = levelSp.getSelectedItemPosition();
 					randomCoordinate(getRowCol(level));
@@ -221,7 +226,8 @@ public class MainActivity extends Activity {
 				
 				Intent intent=new Intent(MainActivity.this, GameActivity.class);
 				intent.putExtras(extras);
-				startActivityForResult(intent, 1);
+				startActivity(intent);
+				//startActivityForResult(intent, 1);
 
 				break;
 				
@@ -235,18 +241,29 @@ public class MainActivity extends Activity {
 	
 	private int getRowCol(int l) {
 		if (l == 0) 
-			return 3;
+			return 2;
 		else if (l == 4)
-			return 4;
+			return 3;
 		else 
-			return 5;
+			return 4;
+	}
+	
+	private void setDifficulty(int l) {
+		if (l == 0)
+			x = Difficulty.EASY;
+		if (l == 1)
+			x = Difficulty.MEDIUM;
+		if (l == 2)
+			x = Difficulty.HARD;
+			
 	}
 	
 	protected void randomCoordinate(int rowCol) {
 		x_array = new int[rowCol*rowCol];
 		y_array = new int[rowCol*rowCol];
-		int maxX = screenWidth - 20;
-		int maxY = screenHeight - 20;
+		setDifficulty(level);
+		int maxX = screenWidth - x.pieceSize();
+		int maxY = (int) (screenHeight - x.pieceSize()*1.6);
 
 		for (int i = 0; i < x_array.length; i++) {
 			x_array[i] = RAN.nextInt(maxX);
@@ -367,11 +384,43 @@ public class MainActivity extends Activity {
 				gson = new Gson();
 				MyMessage Msg = gson.fromJson(text, MyMessage.class);
 				Messages.add(Msg);
+				console(Msg);
 				Log.i(TAG, "into initServerHandler() handleMessage(Message msg) chatMessage = " + Msg);
 			}
 		};
 	}
 
+	public void console(MyMessage msg) {
+		/*get the information*/
+		isReceivedMsg = true;
+		if (msg.getType().equals("level_picture")) {
+			Log.i(TAG,"receiving level_picture");
+			String[] temp = new String[2];
+			temp = msg.getMsg().split("_");
+			level = Integer.parseInt(temp[0]);
+			pictureIndex = Integer.parseInt(temp[1]);
+		}
+		if (msg.getType().equals("coordinate")) {
+			Log.i(TAG, "receiving coordinate");
+			String[] coordinate = new String[2];
+			coordinate = msg.getMsg().split("_");
+			
+			String[] xCoordinate = new String[getRowCol(level)*getRowCol(level)];
+			xCoordinate = coordinate[0].split(" ");
+			x_array = new int[xCoordinate.length];
+			for (int i = 0; i < x_array.length; i++) {
+				x_array[i] = Integer.parseInt(xCoordinate[i]);
+			}	
+			String[] yCoordinate = new String[getRowCol(level)*getRowCol(level)];
+			yCoordinate = coordinate[1].split(" ");
+			y_array = new int[yCoordinate.length];
+			for (int i = 0; i < y_array.length; i++) {
+				y_array[i] = Integer.parseInt(yCoordinate[i]);
+			}
+
+		}		
+	}
+	
 	private void initClientHandler() {
 		if (app.client == null) {
 			Log.i(TAG,"app.client is null");
@@ -388,6 +437,8 @@ public class MainActivity extends Activity {
 				Messages.add(Msg);
 				
 				/*get the information*/
+				console(Msg);
+				/***
 				isReceivedMsg = true;
 				if (Msg.getType().equals("level_picture")) {
 					Log.i(TAG,"receiving level_picture");
@@ -415,6 +466,7 @@ public class MainActivity extends Activity {
 					}
 
 				}
+				****/
 		
 				/****
 				if (Msg.getType().equals("level")) 

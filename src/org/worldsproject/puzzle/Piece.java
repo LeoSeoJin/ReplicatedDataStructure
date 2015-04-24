@@ -1,5 +1,7 @@
 package org.worldsproject.puzzle;
 
+import com.example.puzzle.sharedMemory.AbstractSharedRegister;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,7 +10,7 @@ import android.graphics.Matrix;
 import android.widget.ImageView;
 
 @SuppressLint("NewApi")
-public class Piece {
+public class Piece extends AbstractSharedRegister{
 	private static int idSource = 0;
 	private final int serial = ++idSource;
 	private int x = 0;
@@ -33,6 +35,8 @@ public class Piece {
 	 */
 	private int orientation = 0;
 
+	private boolean isOnDown = false;
+	
 	public Piece(Context c, Bitmap image, int offset) {
 		this.original = image;
 		this.display = image;
@@ -119,6 +123,14 @@ public class Piece {
 		return this.orientation;
 	}
 
+	public boolean getIsOnDown() {
+		return isOnDown;
+	}
+	
+	public void setIsOnDown(boolean f) {
+		isOnDown = f;
+	}
+	
 	public boolean inTop() {
 		if (top == null)
 			return false;
@@ -228,5 +240,16 @@ public class Piece {
 	
 	public static void resetSerial() {
 		idSource = 0;
+	}
+
+	@Override
+	public Piece read() {
+		return this;
+	}
+
+	@Override
+	public void write() {
+		// TODO Auto-generated method stub
+		
 	}
 }

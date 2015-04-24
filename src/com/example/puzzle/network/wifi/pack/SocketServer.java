@@ -101,7 +101,7 @@ public class SocketServer {
 	}
 
 	public void sendMsg(final Socket client, final String msg) {
-		Log.i(TAG, "into sendMsg(final Socket client,final ChatMessage msg) msg = " + msg);
+		Log.i(TAG, "server into sendMsg(final Socket client,final ChatMessage msg) msg = " + msg);
 		PrintWriter out = null;
 		if (client.isConnected()) {
 			if (!client.isOutputShutdown()) {
@@ -109,14 +109,14 @@ public class SocketServer {
 					out = new PrintWriter(client.getOutputStream());
 					out.println(msg);
 					out.flush();
-					Log.i(TAG, "into sendMsg(final Socket client,final ChatMessage msg) msg = " + msg + " success!");
+					Log.i(TAG, "server into sendMsg(final Socket client,final ChatMessage msg) msg = " + msg + " success!");
 				} catch (IOException e) {
 					e.printStackTrace();
-					Log.d(TAG, "into sendMsg(final Socket client,final ChatMessage msg) fail!");
+					Log.d(TAG, "server into sendMsg(final Socket client,final ChatMessage msg) fail!");
 				}
 			}
 		}
-		Log.i(TAG, "out sendMsg(final Socket client,final ChatMessage msg) msg = " + msg);
+		Log.i(TAG, "server out sendMsg(final Socket client,final ChatMessage msg) msg = " + msg);
 	}
 
 	public void sendMsgToAllCLients(final String msg) {

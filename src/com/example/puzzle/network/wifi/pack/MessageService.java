@@ -85,4 +85,21 @@ public class MessageService {
 		gson = new Gson();
 		return gson.toJson(msg);
 	}
+
+	public String structMessage(String type, boolean isOnDown) {
+		MyMessage msg = new MyMessage();
+		msg.setType(type);
+		msg.setDeviceName(deviceName);
+		msg.setNetAddress(deviceIp);
+
+		String text;
+		if (isOnDown) 
+			text = "true";
+		else
+			text = "false";
+		msg.setMsg(text);
+		
+		gson = new Gson();
+		return gson.toJson(msg);
+	}
 }

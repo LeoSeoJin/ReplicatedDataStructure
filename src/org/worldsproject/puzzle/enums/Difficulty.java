@@ -5,11 +5,11 @@ public enum Difficulty {
 
 	public int pieceSize() {
 		if (this == EASY) 
-			return 240;
+			return 360;
 		else if (this == MEDIUM) 
-			return 180;
+			return 240;
 		else 
-			return 144;
+			return 180;
 	}
 	
 	public int getOffset() {
@@ -32,29 +32,29 @@ public enum Difficulty {
 
 	public int getPieceNum() {
 		if (this == EASY) 
-			return 9;
+			return 4;
 		else if (this == MEDIUM) 
-			return 16;
+			return 9;
 		else 
-			return 25;
+			return 16;
 	}
 	
 	public int getRow() {
 		if (this == EASY) 
-			return 3;
+			return 2;
 		else if (this == MEDIUM) 
-			return 4;
+			return 3;
 		else 
-			return 5;		
+			return 4;		
 	}
 	
 	public int getCol() {
 		if (this == EASY) 
-			return 3;
+			return 2;
 		else if (this == MEDIUM) 
-			return 4;
+			return 3;
 		else 
-			return 5;			
+			return 4;			
 	}
 	
 	public static Difficulty getEnumFromString(String e) {

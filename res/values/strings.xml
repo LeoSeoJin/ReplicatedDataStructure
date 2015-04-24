@@ -22,9 +22,8 @@
     <string name="rePlay">REPLAY</string>
     <string name="action_settings">action_settings</string>
     <string-array name="levelArray">
+      <item>------2X2------</item>
       <item>------3X3------</item>
-      <item>------3X4------</item>
-      <item>------4X3------</item>
       <item>------4X4------</item>
     </string-array>
 </resources>

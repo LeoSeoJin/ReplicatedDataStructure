@@ -1,15 +1,19 @@
 package com.example.puzzle;
 
+import com.example.puzzle.network.wifi.pack.Global;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 
 public class StartInterface extends Activity{
+	private static final String TAG = "StartInterface";
 	private Button btstart;
 	private Button btexit;
 	private Button btwifi;
@@ -27,6 +31,11 @@ public class StartInterface extends Activity{
         btwifi = (Button) findViewById(R.id.wifi_button);
         btwifi.setOnClickListener(bt_listener);
         
+        Global.setIp();
+        for (int i = 0; i < 5; i++) {
+        	Log.i(TAG, "Global.ip"+Global.IP);
+        
+        }
         /****
         WifiAdmin wifi_admin = new WifiAdmin(this);
         wifi_admin.enableWiFi();

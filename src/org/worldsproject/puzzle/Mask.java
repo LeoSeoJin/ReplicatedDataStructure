@@ -201,6 +201,36 @@ public class Mask
 		resources.put("mask_240_full_1_1_0_1", R.raw.mask_240_full_1_1_0_1);
 		resources.put("mask_240_full_1_1_1_0", R.raw.mask_240_full_1_1_1_0);
 		resources.put("mask_240_full_1_1_1_1", R.raw.mask_240_full_1_1_1_1);
+		
+		/**/
+		resources.put("mask_360_corner_0_0", R.raw.mask_240_corner_0_0);
+		resources.put("mask_360_corner_0_1", R.raw.mask_240_corner_0_1);
+		resources.put("mask_360_corner_1_0", R.raw.mask_240_corner_1_0);
+		resources.put("mask_360_corner_1_1", R.raw.mask_240_corner_1_1);
+		resources.put("mask_360_edge_0_0_0", R.raw.mask_240_edge_0_0_0);
+		resources.put("mask_360_edge_0_0_1", R.raw.mask_240_edge_0_0_1);
+		resources.put("mask_360_edge_0_1_0", R.raw.mask_240_edge_0_1_0);
+		resources.put("mask_360_edge_0_1_1", R.raw.mask_240_edge_0_1_1);
+		resources.put("mask_360_edge_1_0_0", R.raw.mask_240_edge_1_0_0);
+		resources.put("mask_360_edge_1_0_1", R.raw.mask_240_edge_1_0_1);
+		resources.put("mask_360_edge_1_1_0", R.raw.mask_240_edge_1_1_0);
+		resources.put("mask_360_edge_1_1_1", R.raw.mask_240_edge_1_1_1);
+		resources.put("mask_360_full_0_0_0_0", R.raw.mask_240_full_0_0_0_0);
+		resources.put("mask_360_full_0_0_0_1", R.raw.mask_240_full_0_0_0_1);
+		resources.put("mask_360_full_0_0_1_0", R.raw.mask_240_full_0_0_1_0);
+		resources.put("mask_360_full_0_0_1_1", R.raw.mask_240_full_0_0_1_1);
+		resources.put("mask_360_full_0_1_0_0", R.raw.mask_240_full_0_1_0_0);
+		resources.put("mask_360_full_0_1_0_1", R.raw.mask_240_full_0_1_0_1);
+		resources.put("mask_360_full_0_1_1_0", R.raw.mask_240_full_0_1_1_0);
+		resources.put("mask_360_full_0_1_1_1", R.raw.mask_240_full_0_1_1_1);
+		resources.put("mask_360_full_1_0_0_0", R.raw.mask_240_full_1_0_0_0);
+		resources.put("mask_360_full_1_0_0_1", R.raw.mask_240_full_1_0_0_1);
+		resources.put("mask_360_full_1_0_1_0", R.raw.mask_240_full_1_0_1_0);
+		resources.put("mask_360_full_1_0_1_1", R.raw.mask_240_full_1_0_1_1);
+		resources.put("mask_360_full_1_1_0_0", R.raw.mask_240_full_1_1_0_0);
+		resources.put("mask_360_full_1_1_0_1", R.raw.mask_240_full_1_1_0_1);
+		resources.put("mask_360_full_1_1_1_0", R.raw.mask_240_full_1_1_1_0);
+		resources.put("mask_360_full_1_1_1_1", R.raw.mask_240_full_1_1_1_1);
 	}
 
 	private Bitmap loadBitmap()
