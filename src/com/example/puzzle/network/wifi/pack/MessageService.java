@@ -1,5 +1,7 @@
 package com.example.puzzle.network.wifi.pack;
 
+import org.worldsproject.puzzle.PuzzleGroup;
+
 import android.util.Log;
 
 import com.example.puzzle.network.wifi.WifiApplication;
@@ -20,13 +22,13 @@ public class MessageService {
 	}
 	
 	public void sendMsg(String msg) {
-		Log.i(TAG, "into sendMsg(Message msg) msg =" + msg);
+		//Log.i(TAG, "into sendMsg(Message msg) msg =" + msg);
 		if (app.server != null) {
 			app.server.sendMsgToAllCLients(msg);
 		} else if (app.client != null) {
 			app.client.sendMsg(msg);
 		}
-		Log.i(TAG, "out sendMsg(Message msg) msg =" + msg);
+		//Log.i(TAG, "out sendMsg(Message msg) msg =" + msg);
 	}
 	
 	public String structMessage(String type, int t1, int t2) {
@@ -78,7 +80,7 @@ public class MessageService {
 		StringBuffer text = new StringBuffer("");
 		for (int p: array) {
 			text.append(p);
-			text.append(" ");
+			text.append("_");
 		}
 		msg.setMsg(text.toString());
 		
@@ -99,6 +101,31 @@ public class MessageService {
 			text = "false";
 		msg.setMsg(text);
 		
+		gson = new Gson();
+		return gson.toJson(msg);
+	}
+
+	public String structMessage(String type, int[] p, int[] x, int[] y) {
+		MyMessage msg = new MyMessage();
+		msg.setType(type);
+		msg.setDeviceName(deviceName);
+		msg.setNetAddress(deviceIp);	
+		StringBuffer text = new StringBuffer("");
+		for (int i: p) {
+			text.append(i);
+			text.append(" ");
+		}
+		text.append("_");
+		for (int i: x) {
+			text.append(i);
+			text.append(" ");
+		}
+		text.append("_");
+		for (int i: y) {
+			text.append(i);
+			text.append(" ");
+		}
+		msg.setMsg(text.toString());
 		gson = new Gson();
 		return gson.toJson(msg);
 	}

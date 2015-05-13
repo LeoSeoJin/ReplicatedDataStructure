@@ -50,7 +50,7 @@ public class MyMessage {
 		this.msg = msg;
 
 	}
-
+	
 	@Override
 	public String toString() {
 		return "deviceName " + deviceName + " netAddress =" + netAddress + "  msg =" + msg + " msgTime=" + msgTime;

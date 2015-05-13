@@ -1,5 +1,6 @@
 package com.example.puzzle;
 
+import com.example.puzzle.network.wifi.WifiApplication;
 import com.example.puzzle.network.wifi.pack.Global;
 
 import android.app.Activity;
@@ -32,6 +33,9 @@ public class StartInterface extends Activity{
         btwifi.setOnClickListener(bt_listener);
         
         Global.setIp();
+        WifiApplication app = (WifiApplication) this.getApplication();
+        Global.setApplication(app);
+        Global.setMsgService();
         for (int i = 0; i < 5; i++) {
         	Log.i(TAG, "Global.ip"+Global.IP);
         

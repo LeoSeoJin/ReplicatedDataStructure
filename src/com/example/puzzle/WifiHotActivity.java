@@ -322,9 +322,9 @@ public class WifiHotActivity extends Activity implements WifiBroadCastOperations
 			public void handleMessage(Message msg) {
 				Log.i(TAG, "into initClientHandler() handleMessage(Message msg)");
 				if (msg.what == 0) {
-					statu.setText("initial Client Handler");
+					statu.setText("unsuccessfully initial Client");
 				} else {
-					statu.setText("initial Client Handler");
+					statu.setText("successfully initial Client");
 					String text = (String) msg.obj;
 					Log.i(TAG, "into initClientHandler() handleMessage(Message msg) text =" + text);
 				}

@@ -6,12 +6,13 @@ import java.util.List;
 import org.worldsproject.puzzle.PuzzleView;
 import org.worldsproject.puzzle.enums.Difficulty;
 
-import com.example.puzzle.network.wifi.WifiApplication;
 import com.example.puzzle.network.wifi.pack.MyMessage;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -27,9 +28,8 @@ public class GameActivity extends Activity{
 	private Difficulty x;
 	private int puzzle;
 	private Bitmap image;
-	
-	private WifiApplication app;
 
+	public static Resources resource;
 	public List<MyMessage> Messages = new ArrayList<MyMessage>();
 	
 	@Override
@@ -38,8 +38,6 @@ public class GameActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		//ActivityManager.getInstance().addActivity(GameActivity.this);
 		setContentView(R.layout.puzzle);
-		
-        app = (WifiApplication) this.getApplication();
         
         /***
         msgService = new MessageService(app, deviceName, deviceIp);      
@@ -67,25 +65,26 @@ public class GameActivity extends Activity{
 		System.out.println("picture_index "+puzzle);
 		
     	if(0==puzzle){
-   			image=BitmapFactory.decodeResource(getResources(),R.drawable.img0);
+   			image=BitmapFactory.decodeResource(getResources(),R.drawable.img10);
    	 	}else if(1==puzzle){
-   			image=BitmapFactory.decodeResource(getResources(),R.drawable.img1);
+   			image=BitmapFactory.decodeResource(getResources(),R.drawable.img11);
    	    }else if(2==puzzle){
-   			image=BitmapFactory.decodeResource(getResources(),R.drawable.img2);
+   			image=BitmapFactory.decodeResource(getResources(),R.drawable.img12);
    	    }else if(3==puzzle){
-   			image=BitmapFactory.decodeResource(getResources(),R.drawable.img3);
+   			image=BitmapFactory.decodeResource(getResources(),R.drawable.img13);
    	    }else if(4==puzzle){
-   			image=BitmapFactory.decodeResource(getResources(),R.drawable.img4);
+   			image=BitmapFactory.decodeResource(getResources(),R.drawable.img14);
    	    }else if(5==puzzle){
-   			image=BitmapFactory.decodeResource(getResources(),R.drawable.img5);
+   			image=BitmapFactory.decodeResource(getResources(),R.drawable.img15);
    	    }else if(6==puzzle){
-   			image=BitmapFactory.decodeResource(getResources(),R.drawable.img6);
+   			image=BitmapFactory.decodeResource(getResources(),R.drawable.img16);
    	    }else if(7==puzzle){
-   			image=BitmapFactory.decodeResource(getResources(),R.drawable.img7);
+   			image=BitmapFactory.decodeResource(getResources(),R.drawable.img17);
    	    }else if(8==puzzle){
-   	 		image=BitmapFactory.decodeResource(getResources(),R.drawable.img8);
+   	 		image=BitmapFactory.decodeResource(getResources(),R.drawable.img18);
    	    }
-    	
+
+    	resource = getResources();
     	if (level == 0) { 
     		x = Difficulty.EASY;
     	} else if (level == 1) {
@@ -109,12 +108,8 @@ public class GameActivity extends Activity{
     	Log.i(TAG,"level "+level+" p "+puzzle);
     	
     	pv.setCoordinate(x_array, y_array);
-    	//pv.setMsgService(msgService);
-    	//pv.setHandler(serverHandler, clientHandler);
-    	pv.setApplication(app);
     	pv.loadPuzzle(image, x, path(puzzle, x.toString()));
     	pv.initServerClient();
-    	pv.initMsgService();
  		pv.setContext(this);
  		
     }
@@ -137,6 +132,9 @@ public class GameActivity extends Activity{
 		builder.setPositiveButton(R.string.confirm,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
+						MainActivity.isReceivedMsg = false;
+						Intent intent = new Intent(GameActivity.this, MainActivity.class);
+						startActivity(intent);
 						GameActivity.this.finish();
 					}
 				});

@@ -81,7 +81,7 @@ public class SocketClient {
 	}
 
 	public String sendMsg(final String msg) {
-		Log.i(TAG, "client into sendMsgsendMsg(final ChatMessage msg)  msg =" + msg);
+		//Log.i(TAG, "client into sendMsgsendMsg(final ChatMessage msg)  msg =" + msg);
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -92,7 +92,7 @@ public class SocketClient {
 							out.println(msg);
 							// out.println(JsonUtil.obj2Str(msg));
 							out.flush();
-							Log.i(TAG, "client into sendMsg(final Socket client,final ChatMessage msg) msg = " + msg + " success!");
+							//Log.i(TAG, "client into sendMsg(final Socket client,final ChatMessage msg) msg = " + msg + " success!");
 						}
 						Thread.sleep(1000);
 					}

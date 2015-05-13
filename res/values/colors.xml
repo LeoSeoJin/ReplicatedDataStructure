@@ -13,4 +13,5 @@
   <!-- 菊兰色 -->
   <color name="cadetblue">#5F9EA0</color>
   <color name="darkblue">#00008B</color><!--暗蓝色 -->
+  <color name="lemonchiffon">#fffacd</color><!--柠檬绸色 -->
 </resources>

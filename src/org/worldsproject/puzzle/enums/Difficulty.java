@@ -5,20 +5,20 @@ public enum Difficulty {
 
 	public int pieceSize() {
 		if (this == EASY) 
-			return 360;
+			return 384;
 		else if (this == MEDIUM) 
-			return 240;
+			return 256;
 		else 
-			return 180;
+			return 192;
 	}
 	
 	public int getOffset() {
 		if (this == EASY)
-			return 10;
+			return 60;
 		if (this == MEDIUM)
-			return 8;
+			return 40;
 		else
-			return 5;
+			return 30;
 	}
 
 	public String toString() {

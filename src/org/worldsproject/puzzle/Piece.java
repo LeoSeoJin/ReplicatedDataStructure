@@ -1,7 +1,5 @@
 package org.worldsproject.puzzle;
 
-import com.example.puzzle.sharedMemory.AbstractSharedRegister;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,7 +8,7 @@ import android.graphics.Matrix;
 import android.widget.ImageView;
 
 @SuppressLint("NewApi")
-public class Piece extends AbstractSharedRegister{
+public class Piece{
 	private static int idSource = 0;
 	private final int serial = ++idSource;
 	private int x = 0;
@@ -194,32 +192,33 @@ public class Piece extends AbstractSharedRegister{
 		if (p == this.top) {
 			int mx = x - p.getX();
 			int my = y - (p.getY() + p.getHeight());
-			//group.translate(mx, my + (offset * 2));
-			group.translate(mx, my);
+			group.translate(mx, my + (offset * 2));
+			//group.translate(mx, my);
 		}
 
 		if (p == this.right) {
 			int mx = x - (p.getX() - this.getWidth());
 			int my = y - p.getY();
-			//group.translate(mx - (offset * 2), my);
-			group.translate(mx, my);
+			group.translate(mx - (offset * 2), my);
+			//group.translate(mx, my);
 		}
 
 		if (p == this.bottom) {
 			int mx = x - p.getX();
 			int my = y - (p.getY() - this.getHeight());
-			//group.translate(mx, my - (offset * 2));
-			group.translate(mx, my);
+			group.translate(mx, my - (offset * 2));
+			//group.translate(mx, my);
 		}
 
 		if (p == this.left) {
 			int mx = x - (p.getX() + p.getWidth());
 			int my = y - p.getY();
-			//group.translate(mx + (offset * 2), my);
-			group.translate(mx, my);
+			group.translate(mx + (offset * 2), my);
+			//group.translate(mx, my);
 		}
 
 		this.group.addGroup(p.getGroup());
+		this.group.write("updategroup", this.group);
 	}
 
 	public int getSerial() {
@@ -240,16 +239,5 @@ public class Piece extends AbstractSharedRegister{
 	
 	public static void resetSerial() {
 		idSource = 0;
-	}
-
-	@Override
-	public Piece read() {
-		return this;
-	}
-
-	@Override
-	public void write() {
-		// TODO Auto-generated method stub
-		
 	}
 }

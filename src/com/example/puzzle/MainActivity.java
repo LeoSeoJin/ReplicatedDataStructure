@@ -54,12 +54,11 @@ public class MainActivity extends Activity implements ConsoleMessage{
 	private Button returnBtn;
 	
 	private Difficulty x;
-	private WifiApplication app;
 	private Gson gson;
 	private Handler serverHandler;
 	private Handler clientHandler;
-	private boolean isReceivedMsg = false;
-	private MessageService msgService;
+	public static boolean isReceivedMsg;
+	public static MessageService msgService;
 	public List<MyMessage> Messages = new ArrayList<MyMessage>();
 	
 	private static final int[] pictureArray={R.drawable.model0,R.drawable.model1,R.drawable.model2,
@@ -74,13 +73,11 @@ public class MainActivity extends Activity implements ConsoleMessage{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //ActivityManager.getInstance().addActivity(MainActivity.this);
-        Log.i(TAG,"onCreate");
+        ActivityManager.getInstance().addActivity(MainActivity.this);
         setContentView(R.layout.activity_main);
-        app = (WifiApplication) this.getApplication();
-        msgService = new MessageService(app, deviceName, deviceIp);
+        msgService = new MessageService(Global.APP, deviceName, deviceIp);
         initControls();
-    	
+
     	initServerHandler();
     	initClientHandler();
     	initServerListener();
@@ -90,7 +87,6 @@ public class MainActivity extends Activity implements ConsoleMessage{
     }
     
     private void initControls(){
-    	Log.i(TAG,"initialControls");
     	levelSp=(Spinner)findViewById(R.id.main_level_spinner);
     	pictureGridView=(GridView)findViewById(R.id.main_picture_gridView);
     	pictureGridView.setOnItemClickListener(new ItemClickListener());//监听
@@ -142,8 +138,6 @@ public class MainActivity extends Activity implements ConsoleMessage{
 	}
 	
 	public List<Map<String, Object>> getAllItemsForListView() {
-		// TODO Auto-generated method stub
-		// 生成动态数组，并且传入数据
 		List<Map<String, Object>> imageItem = new ArrayList<Map<String, Object>>();
 		for (int i=0;i<pictureArray.length;i++) {
 			HashMap<String, Object> tempMap = new HashMap<String, Object>();
@@ -156,7 +150,6 @@ public class MainActivity extends Activity implements ConsoleMessage{
 
 	private class ItemClickListener implements OnItemClickListener {
 		public void onItemClick(AdapterView<?> adapterView,	View view,int position,	long rowid){
-			// 在本例中position=rowid
 			pictureIndex=position;
 		}
 
@@ -211,10 +204,6 @@ public class MainActivity extends Activity implements ConsoleMessage{
 					randomCoordinate(getRowCol(level));
 					msgService.sendMsg(msgService.structMessage("level_picture", levelSp.getSelectedItemPosition(), pictureIndex));
 					msgService.sendMsg(msgService.structMessage("coordinate", x_array, y_array));
-					//sendMsg(structMessage("levle", levelSp.getSelectedItemPosition()));
-					//sendMsg(structMessage("picture", pictureIndex));
-					//sendMsg(structMessage("xcoordinate", x_array));
-					//sendMsg(structMessage("ycoordinate", y_array));
 				}
 										
 				Bundle extras=new Bundle();
@@ -228,7 +217,7 @@ public class MainActivity extends Activity implements ConsoleMessage{
 				intent.putExtras(extras);
 				startActivity(intent);
 				//startActivityForResult(intent, 1);
-
+				//MainActivity.this.finish();
 				break;
 				
 			case R.id.main_return_btn:
@@ -270,62 +259,13 @@ public class MainActivity extends Activity implements ConsoleMessage{
 			y_array[i] = RAN.nextInt(maxY);
 		}
 	}
-
-	/*************
-	private void sendMsg(String msg) {
-		Log.i(TAG, "into sendMsg(Message msg) msg =" + msg);
-		if (app.server != null) {
-			app.server.sendMsgToAllCLients(msg);
-		} else if (app.client != null) {
-			app.client.sendMsg(msg);
-		}
-		Log.i(TAG, "out sendMsg(Message msg) msg =" + msg);
-	}
-	
-	private String structMessage(String type, int t1, int t2) {
-		MyMessage msg = new MyMessage();
-		msg.setType(type);
-		msg.setDeviceName(deviceName);
-		msg.setNetAddress(deviceIp);
-		msg.setMsg(Integer.toString(t1)+" "+Integer.toString(t2));
-		gson = new Gson();
-		return gson.toJson(msg);
-	}
-	
-	private String structMessage(String type, int text) {
-		MyMessage msg = new MyMessage();
-		msg.setType(type);
-		msg.setDeviceName(deviceName);
-		msg.setNetAddress(deviceIp);
-		msg.setMsg(Integer.toString(text));
-		gson = new Gson();
-		return gson.toJson(msg);
-	}
-
-	private String structMessage(String type, int[] array) {
-		MyMessage msg = new MyMessage();
-		msg.setType(type);
-		msg.setDeviceName(deviceName);
-		msg.setNetAddress(deviceIp);
-
-		StringBuffer text = new StringBuffer("");
-		for (int p: array) {
-			text.append(p);
-			text.append(" ");
-		}
-		msg.setMsg(text.toString());
-		
-		gson = new Gson();
-		return gson.toJson(msg);
-	}
-	*****************/
 	
 	private void initServerListener() {
-		if (app.server == null) {
+		if (Global.APP.server == null) {
 			return;
 		}
-		Log.i(TAG, "into initServerListener() app server =" + app.server);
-		app.server.setMsgListener(new ServerMsgListener() {
+		Log.i(TAG, "into initServerListener() app server =" + Global.APP.server);
+		Global.APP.server.setMsgListener(new ServerMsgListener() {
 			Message msg = null;
 
 			@Override
@@ -346,11 +286,11 @@ public class MainActivity extends Activity implements ConsoleMessage{
 	}
 
 	private void initClientListener() {
-		if (app.client == null) {
+		if (Global.APP.client == null) {
 			return;
 		}
-		Log.i(TAG, "into initClientListener() app client =" + app.client);
-		app.client.setMsgListener(new ClientMsgListener() {
+		Log.i(TAG, "into initClientListener() app client =" + Global.APP.client);
+		Global.APP.client.setMsgListener(new ClientMsgListener() {
 
 			Message msg = null;
 
@@ -371,7 +311,7 @@ public class MainActivity extends Activity implements ConsoleMessage{
 	}
 
 	private void initServerHandler() {
-		if (app.server == null) {
+		if (Global.APP.server == null) {
 			Log.i(TAG,"app.server is null");
 			return;
 		}
@@ -422,7 +362,7 @@ public class MainActivity extends Activity implements ConsoleMessage{
 	}
 	
 	private void initClientHandler() {
-		if (app.client == null) {
+		if (Global.APP.client == null) {
 			Log.i(TAG,"app.client is null");
 			return;
 		}
@@ -438,62 +378,7 @@ public class MainActivity extends Activity implements ConsoleMessage{
 				
 				/*get the information*/
 				console(Msg);
-				/***
-				isReceivedMsg = true;
-				if (Msg.getType().equals("level_picture")) {
-					Log.i(TAG,"receiving level_picture");
-					String[] temp = new String[2];
-					temp = Msg.getMsg().split("_");
-					level = Integer.parseInt(temp[0]);
-					pictureIndex = Integer.parseInt(temp[1]);
-				}
-				if (Msg.getType().equals("coordinate")) {
-					Log.i(TAG, "receiving coordinate");
-					String[] coordinate = new String[2];
-					coordinate = Msg.getMsg().split("_");
-					
-					String[] xCoordinate = new String[getRowCol(level)*getRowCol(level)];
-					xCoordinate = coordinate[0].split(" ");
-					x_array = new int[xCoordinate.length];
-					for (int i = 0; i < x_array.length; i++) {
-						x_array[i] = Integer.parseInt(xCoordinate[i]);
-					}	
-					String[] yCoordinate = new String[getRowCol(level)*getRowCol(level)];
-					yCoordinate = coordinate[1].split(" ");
-					y_array = new int[yCoordinate.length];
-					for (int i = 0; i < y_array.length; i++) {
-						y_array[i] = Integer.parseInt(yCoordinate[i]);
-					}
 
-				}
-				****/
-		
-				/****
-				if (Msg.getType().equals("level")) 
-					level = Integer.parseInt(Msg.getMsg());
-				if (Msg.getType().equals("picture"))
-					pictureIndex = Integer.parseInt(Msg.getMsg());
-				if (Msg.getType().equals("xcoordinate")) {
-					Log.i(TAG, "receiving x coordinate");
-					
-					String[] temp = new String[getRowCol(level)*getRowCol(level)];
-					temp = Msg.getMsg().split(" ");
-					x_array = new int[temp.length];
-					for (int i = 0; i < x_array.length; i++) {
-						x_array[i] = Integer.parseInt(temp[i]);
-					}
-				}
-				if (Msg.getType().equals("ycoordinate")){
-					Log.i(TAG, "receiving y coordinate");
-					
-					String[] temp = new String[getRowCol(level)*getRowCol(level)];
-					temp = Msg.getMsg().split(" ");
-					y_array = new int[temp.length];
-					for (int i = 0; i < y_array.length; i++) {
-						y_array[i] = Integer.parseInt(temp[i]);
-					}
-				}
-				*****/
 				Log.i(TAG, "into initClientHandler() handleMessage(Message msg) chatMessage =" + Msg);
 			}
 		};

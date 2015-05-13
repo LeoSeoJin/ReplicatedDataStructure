@@ -4,19 +4,26 @@ import java.util.Random;
 
 import org.worldsproject.puzzle.enums.Difficulty;
 
+import com.example.puzzle.GameActivity;
+import com.example.puzzle.R;
+
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.util.Log;
 
 public class PuzzleGenerator {
+	private static final String TAG = "PuzzleGenerator";
 	private static final Random RAN = new Random();
-
+	
 	private Context context;
 	private Bitmap image;
+	private Bitmap foreground;
 	private int pieceSize;
 	private Difficulty difficulty;
 
@@ -138,15 +145,13 @@ public class PuzzleGenerator {
 		Bitmap[] images = new Bitmap[masks.length];
 		int position = 0;
 		int offset = masks[0].getOffset();
+		Log.i(TAG, "mask.offset "+offset);
 		for (int y = 0; y < this.image.getHeight(); y += this.pieceSize) {
 			for (int x = 0; x < this.image.getWidth(); x += this.pieceSize) {
+				//**
 				Bitmap store = Bitmap.createBitmap(pieceSize + (2 * offset),
 						pieceSize + (2 * offset), Bitmap.Config.ARGB_8888);
-
-				Bitmap store2 = Bitmap.createBitmap(pieceSize, pieceSize, Bitmap.Config.ARGB_8888);
-				Bitmap store3 = Bitmap.createBitmap(this.image,x,y,pieceSize,pieceSize);
 				Canvas c = new Canvas(store);
-
 				c.drawBitmap(this.image, -x + offset, -y + offset, null);
 
 				Paint paint = new Paint();
@@ -155,8 +160,32 @@ public class PuzzleGenerator {
 
 				c.drawBitmap(masks[position].getMask(), 0, 0, paint);
 
-				//images[position] = store;
+				images[position] = store;
+				/**/
+				/**
+				Bitmap store2 = Bitmap.createBitmap(pieceSize, pieceSize, Bitmap.Config.ARGB_8888);
+				Canvas c = new Canvas(store2);
+				c.drawBitmap(this.image, -x, -y, null);
+
+				Paint paint = new Paint();
+				//paint.setColor(Color.BLACK);
+				paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER));
+
+				if (difficulty == Difficulty.EASY) 
+					foreground = BitmapFactory.decodeResource(GameActivity.resource,R.drawable.border_360);
+				if (difficulty == Difficulty.MEDIUM) 
+					foreground = BitmapFactory.decodeResource(GameActivity.resource,R.drawable.border_240);
+				if (difficulty == Difficulty.HARD) 
+					foreground = BitmapFactory.decodeResource(GameActivity.resource,R.drawable.border_180);
+				c.drawBitmap(foreground, 0, 0, paint);
+
+				images[position] = store2;
+				Log.i(TAG,"image size "+store2.getWidth()+" "+store2.getHeight());
+				**/
+				/**
+				Bitmap store3 = Bitmap.createBitmap(this.image,x,y,pieceSize,pieceSize);
 				images[position] = store3;
+				**/
 				position++;
 			}
 		}

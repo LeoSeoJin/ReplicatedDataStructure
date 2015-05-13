@@ -7,7 +7,6 @@ import org.worldsproject.puzzle.enums.Difficulty;
 
 import com.example.puzzle.GameActivity;
 import com.example.puzzle.R;
-import com.example.puzzle.network.wifi.WifiApplication;
 import com.example.puzzle.network.wifi.pack.ConsoleMessage;
 import com.example.puzzle.network.wifi.pack.Global;
 import com.example.puzzle.network.wifi.pack.MessageService;
@@ -16,14 +15,12 @@ import com.example.puzzle.network.wifi.pack.SocketClient.ClientMsgListener;
 import com.example.puzzle.network.wifi.pack.SocketServer.ServerMsgListener;
 import com.google.gson.Gson;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -43,9 +40,6 @@ public class PuzzleView extends View implements OnGestureListener,
 		OnDoubleTapListener, OnScaleGestureListener, AnimationListener, ConsoleMessage {
 	private static final String TAG = "PuzzleView";
 	
-	private static final String deviceName = Global.DEVICENAME;
-	private static final String deviceIp = Global.IP;
-	
 	private Puzzle puzzle;
 	private GestureDetector gesture;
 	private ScaleGestureDetector scaleGesture;
@@ -57,11 +51,10 @@ public class PuzzleView extends View implements OnGestureListener,
 	private int[] x_array;
 	private int[] y_array;
 	
-	private MessageService msgService;
+	private MessageService msgService = new MessageService(Global.APP, Global.DEVICENAME, Global.IP);
 	private Gson gson;
 	private Handler serverHandler;
 	private Handler clientHandler;
-	private WifiApplication app;
 	public List<MyMessage> messages = new ArrayList<MyMessage>();
 	
 	public PuzzleView(Context context) {
@@ -132,8 +125,6 @@ public class PuzzleView extends View implements OnGestureListener,
 
 	@Override
 	public void onDraw(Canvas canvas) {
-		Log.i(TAG,"**********call ondraw");
-		
 		if (firstDraw) {
 			firstDraw = false;
 			//puzzle.shuffle(this.getWidth(), this.getHeight());
@@ -171,6 +162,9 @@ public class PuzzleView extends View implements OnGestureListener,
 
 		if (isFinished(tapped))
 			openFinishDialog();
+		
+		if (tapped != null)
+			tapped.setIsOnDown(false);
 		
 		return true;
 	}
@@ -214,8 +208,10 @@ public class PuzzleView extends View implements OnGestureListener,
 		//Log.i(TAG,"tapped"+tapped);
 		if (tapped != null) { 
 			tapped.setIsOnDown(true);
+			Log.i(TAG, ""+tapped.getSerial()+" is onDown");
 			/*get the state of tapped on others'*/
 			boolean isOtherOnDown = isOtherOnDown(readPhase(tapped));
+			removeMsg(tapped); //remove the ack messages for next receive process 
 			if (isOtherOnDown) {
 				warnDialog();
 				tapped = null;
@@ -227,12 +223,14 @@ public class PuzzleView extends View implements OnGestureListener,
 
 	private boolean isOtherOnDown(ArrayList<String> array) {
 		int number = 0;
+		Log.i(TAG,"array "+array.size());
 		for (String s: array) {
+			Log.i(TAG, "array s "+s);
 			if (s.equals("true"))
 				number++;
 		}
 		Log.i(TAG,"number "+number);
-		if (number >= 2) 
+		if (number >= 1) 
 			return true;
 		else 
 			return false;
@@ -247,7 +245,18 @@ public class PuzzleView extends View implements OnGestureListener,
 			}
 		}
 		Log.i(TAG,"readphase "+result.size());
+		
 		return result;
+	}
+	
+	private void removeMsg(Piece p) {
+		if (messages.size() == 0) return;
+		
+		for (int i = 0; i < messages.size(); i++) {
+			if (messages.get(i).getType().equals("ack_readpiece"+"_"+p.getSerial())) {
+				messages.remove(i--);
+			}
+		}
 	}
 
 	private void warnDialog(){	
@@ -274,11 +283,15 @@ public class PuzzleView extends View implements OnGestureListener,
 		if (isFinished(tapped)) 
 			openFinishDialog();
 		
+		if (tapped != null)
+			tapped.setIsOnDown(false);
+		
 		return true;
 	}
 
 	@Override
 	public void onLongPress(MotionEvent e) {
+		Log.i(TAG,"**********onLongPress");
 	}
 
 	@Override
@@ -288,15 +301,21 @@ public class PuzzleView extends View implements OnGestureListener,
 		if (tapped == null) {// We aren't hitting a piece
 			//puzzle.translate(distanceX / scale, distanceY / scale);
 		} else {
+			//tapped.setIsOnDown(true);
 			tapped.getGroup().translate((int) (distanceX / scale),
 					(int) (distanceY / scale));
 		}
-
+		
 		this.invalidate();
+		
+		//if (tapped != null)
+			//tapped.setIsOnDown(false);
 		return true;
 	}
 
 	private boolean checkSurroundings(Piece tapped) {
+		Log.i(TAG,"***********checkSurroundings");
+		
 		if (tapped == null || tapped.getOrientation() != 0) {
 			return false;
 		}
@@ -333,21 +352,29 @@ public class PuzzleView extends View implements OnGestureListener,
 
 		if (isFinished(tapped)) 
 			openFinishDialog();	
+		
+		//if (tapped != null)
+			//tapped.setIsOnDown(false);
 	}
 
 	@Override
 	public boolean onSingleTapUp(MotionEvent e) {
+		Log.i(TAG,"**********onSingleTapUp");
 		if (checkSurroundings(tapped))
 			this.invalidate();
 
 		if (isFinished(tapped)) 
 			openFinishDialog();
 		
+		if (tapped != null)
+			tapped.setIsOnDown(false);
+		
 		return true;
 	}
 
 	@Override
 	public boolean onScale(ScaleGestureDetector detector) {
+		Log.i(TAG,"**********onScale");
 		scale *= detector.getScaleFactor();
 		this.invalidate();
 		return true;
@@ -355,11 +382,13 @@ public class PuzzleView extends View implements OnGestureListener,
 
 	@Override
 	public boolean onScaleBegin(ScaleGestureDetector detector) {
+		Log.i(TAG,"**********onScaleBegin");
 		return true;
 	}
 
 	@Override
 	public void onScaleEnd(ScaleGestureDetector detector) {
+		Log.i(TAG,"**********onScaleEnd");
 	}
 
 	public void shuffle() {
@@ -406,6 +435,11 @@ public class PuzzleView extends View implements OnGestureListener,
 			return false;
 	}
 	
+	public void finishedAction() {
+		msgService.sendMsg(msgService.structMessage("finished", true));
+		openFinishDialog();
+	}
+	
     private void openFinishDialog(){
     	Builder builder = new AlertDialog.Builder(context);
     	builder.setIcon(R.drawable.success);
@@ -444,26 +478,14 @@ public class PuzzleView extends View implements OnGestureListener,
 		for (int i = 0; i < y_array.length; i++) 
 			this.y_array[i] = y_array[i];
 	}
-
-	public void setHandler(Handler server, Handler client) {
-		serverHandler = server;
-		clientHandler = client;
-	}
-
-	public void setMsgService(MessageService msgService) {
-		this.msgService = msgService;  
-	}
-
-	public void setApplication(WifiApplication app) {
-		this.app = app;
-	}
 	
 	private void initServerListener() {
-		if (app.server == null) {
+
+		if (Global.APP.server == null) {
 			return;
 		}
-		Log.i(TAG, "into initServerListener() app server =" + app.server);
-		app.server.setMsgListener(new ServerMsgListener() {
+		Log.i(TAG, "into initServerListener() app server =" + Global.APP.server);
+		Global.APP.server.setMsgListener(new ServerMsgListener() {
 			Message msg = null;
 
 			@Override
@@ -484,17 +506,17 @@ public class PuzzleView extends View implements OnGestureListener,
 	}
 
 	private void initClientListener() {
-		if (app.client == null) {
+		if (Global.APP.client == null) {
 			return;
 		}
-		Log.i(TAG, "into initClientListener() app client =" + app.client);
-		app.client.setMsgListener(new ClientMsgListener() {
+		//Log.i(TAG, "into initClientListener() app client =" + Global.APP.client);
+		Global.APP.client.setMsgListener(new ClientMsgListener() {
 
 			Message msg = null;
 
 			@Override
 			public void handlerHotMsg(String hotMsg) {
-				Log.i(TAG, "into initClientListener() handlerHotMsg(String hotMsg) hotMsg = " + hotMsg);
+				//Log.i(TAG, "into initClientListener() handlerHotMsg(String hotMsg) hotMsg = " + hotMsg);
 				msg = clientHandler.obtainMessage();
 				msg.obj = hotMsg;
 				clientHandler.sendMessage(msg);
@@ -509,7 +531,7 @@ public class PuzzleView extends View implements OnGestureListener,
 	}
 
 	private void initServerHandler() {
-		if (app.server == null) {
+		if (Global.APP.server == null) {
 			Log.i(TAG,"app.server is null");
 			return;
 		}
@@ -529,14 +551,14 @@ public class PuzzleView extends View implements OnGestureListener,
 	}
 
 	private void initClientHandler() {
-		if (app.client == null) {
+		if (Global.APP.client == null) {
 			Log.i(TAG,"app.client is null");
 			return;
 		}
 		clientHandler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
-				Log.i(TAG, "into initClientHandler() handleMessage(Message msg)");
+				//Log.i(TAG, "into initClientHandler() handleMessage(Message msg)");
 				String text = (String) msg.obj;
 				gson = new Gson();
 				MyMessage Msg = gson.fromJson(text, MyMessage.class);
@@ -544,7 +566,7 @@ public class PuzzleView extends View implements OnGestureListener,
 				
 				console(Msg);
 				
-				Log.i(TAG, "into initClientHandler() handleMessage(Message msg) chatMessage =" + Msg);
+				//Log.i(TAG, "into initClientHandler() handleMessage(Message msg) chatMessage =" + Msg);
 			}
 		};
 	}
@@ -558,13 +580,56 @@ public class PuzzleView extends View implements OnGestureListener,
 			Log.i(TAG,"group "+temp.getSerial());
 			boolean ack = false;
 			for (Piece p: temp.getGroup()) {
-				if (p.getIsOnDown())
+				Log.i(TAG,"p ondown "+p.getIsOnDown());
+				if (p.getIsOnDown()) {
 					Log.i(TAG,"p is ondown "+p.getSerial());
 					ack = true;
+					break;
+				}
 			}
 			Log.i(TAG,"ack "+ack);
 			msgService.sendMsg(msgService.structMessage("ack_readpiece"+"_"+serial, ack));
-		}		
+			messages.remove(msg); //remove the "readpiece" message;
+		}
+		if (msg.getType().equals("writepiece") && !msg.getNetAddress().equals(Global.IP)) {
+			Log.i(TAG,"writepiece msg");
+			String[] pxy = new String[3];
+			pxy = msg.getMsg().split("_");
+			
+			String[] p = new String[Difficulty.HARD.getRow()*Difficulty.HARD.getCol()];
+			p = pxy[0].split(" ");
+			String[] x = new String[p.length];
+			x = pxy[1].split(" ");
+			String[] y = new String[p.length];
+			y = pxy[2].split(" ");
+			for (int i = 0; i < p.length; i++) {
+				puzzle.getPieces().get(Integer.parseInt(p[i])-1).setX(Integer.parseInt(x[i]));
+				puzzle.getPieces().get(Integer.parseInt(p[i])-1).setY(Integer.parseInt(y[i]));
+			}
+			this.invalidate();
+			for (int i = 0; i < p.length; i++) {
+				Log.i(TAG,"Piece "+puzzle.getPieces().get(Integer.parseInt(p[i])-1).getSerial());
+				Log.i(TAG,"x "+puzzle.getPieces().get(Integer.parseInt(p[i])-1).getX());
+				Log.i(TAG,"y "+puzzle.getPieces().get(Integer.parseInt(p[i])-1).getY());
+			}
+		}
+		if (msg.getType().equals("updategroup") && !msg.getNetAddress().equals(Global.IP)) {
+			Log.i(TAG,"updategroup");
+			String[] group_pieces  = new String[Difficulty.HARD.getRow()*Difficulty.HARD.getCol()];
+			group_pieces = msg.getMsg().split("_");
+			for (String p: group_pieces) {
+				for (String piece: group_pieces) {
+					int group = puzzle.getPieces().get(Integer.parseInt(p)-1).getGroup().getSerial();
+					int pieceIndex = puzzle.getPieces().get(Integer.parseInt(piece)-1).getSerial();
+					Log.i(TAG, "group "+group+" piece "+pieceIndex);
+					puzzle.getPieces().get(Integer.parseInt(p)-1).getGroup().addPiece(puzzle.getPieces().get(Integer.parseInt(piece)-1));
+				}
+			}
+		}
+		if (msg.getType().equals("finished") && !msg.getNetAddress().equals(Global.IP)) {
+			this.invalidate();
+			openFinishDialog();
+		}
 	}
 	
 	public void initServerClient() {
@@ -573,9 +638,4 @@ public class PuzzleView extends View implements OnGestureListener,
 		initServerListener();
 		initClientListener();
 	}
-
-	public void initMsgService() {
-		msgService = new MessageService(app, deviceName, deviceIp);
-	}
-
 }

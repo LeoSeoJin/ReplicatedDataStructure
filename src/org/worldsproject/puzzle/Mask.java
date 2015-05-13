@@ -71,11 +71,11 @@ public class Mask
 		// All puzzle like and pretty.
 		// Because the pieces have already been make, we know the offsets.
 		if (difficulty == Difficulty.EASY)
-			this.offset = 10;
+			this.offset = 60;
 		else if (difficulty == Difficulty.MEDIUM)
-			this.offset = 8;
+			this.offset = 40;
 		else
-			this.offset = 5;
+			this.offset = 30;
 		
 		mask = loadBitmap();
 	}
@@ -85,152 +85,93 @@ public class Mask
 		if (resources.isEmpty() == false)
 			return;
 
-		resources.put("mask_32_corner_0_0", R.raw.mask_32_corner_0_0);
-		resources.put("mask_32_corner_0_1", R.raw.mask_32_corner_0_1);
-		resources.put("mask_32_corner_1_0", R.raw.mask_32_corner_1_0);
-		resources.put("mask_32_corner_1_1", R.raw.mask_32_corner_1_1);
-		resources.put("mask_32_edge_0_0_0", R.raw.mask_32_edge_0_0_0);
-		resources.put("mask_32_edge_0_0_1", R.raw.mask_32_edge_0_0_1);
-		resources.put("mask_32_edge_0_1_0", R.raw.mask_32_edge_0_1_0);
-		resources.put("mask_32_edge_0_1_1", R.raw.mask_32_edge_0_1_1);
-		resources.put("mask_32_edge_1_0_0", R.raw.mask_32_edge_1_0_0);
-		resources.put("mask_32_edge_1_0_1", R.raw.mask_32_edge_1_0_1);
-		resources.put("mask_32_edge_1_1_0", R.raw.mask_32_edge_1_1_0);
-		resources.put("mask_32_edge_1_1_1", R.raw.mask_32_edge_1_1_1);
-		resources.put("mask_32_full_0_0_0_0", R.raw.mask_32_full_0_0_0_0);
-		resources.put("mask_32_full_0_0_0_1", R.raw.mask_32_full_0_0_0_1);
-		resources.put("mask_32_full_0_0_1_0", R.raw.mask_32_full_0_0_1_0);
-		resources.put("mask_32_full_0_0_1_1", R.raw.mask_32_full_0_0_1_1);
-		resources.put("mask_32_full_0_1_0_0", R.raw.mask_32_full_0_1_0_0);
-		resources.put("mask_32_full_0_1_0_1", R.raw.mask_32_full_0_1_0_1);
-		resources.put("mask_32_full_0_1_1_0", R.raw.mask_32_full_0_1_1_0);
-		resources.put("mask_32_full_0_1_1_1", R.raw.mask_32_full_0_1_1_1);
-		resources.put("mask_32_full_1_0_0_0", R.raw.mask_32_full_1_0_0_0);
-		resources.put("mask_32_full_1_0_0_1", R.raw.mask_32_full_1_0_0_1);
-		resources.put("mask_32_full_1_0_1_0", R.raw.mask_32_full_1_0_1_0);
-		resources.put("mask_32_full_1_0_1_1", R.raw.mask_32_full_1_0_1_1);
-		resources.put("mask_32_full_1_1_0_0", R.raw.mask_32_full_1_1_0_0);
-		resources.put("mask_32_full_1_1_0_1", R.raw.mask_32_full_1_1_0_1);
-		resources.put("mask_32_full_1_1_1_0", R.raw.mask_32_full_1_1_1_0);
-		resources.put("mask_32_full_1_1_1_1", R.raw.mask_32_full_1_1_1_1);
-
-		resources.put("mask_48_corner_0_0", R.raw.mask_48_corner_0_0);
-		resources.put("mask_48_corner_0_1", R.raw.mask_48_corner_0_1);
-		resources.put("mask_48_corner_1_0", R.raw.mask_48_corner_1_0);
-		resources.put("mask_48_corner_1_1", R.raw.mask_48_corner_1_1);
-		resources.put("mask_48_edge_0_0_0", R.raw.mask_48_edge_0_0_0);
-		resources.put("mask_48_edge_0_0_1", R.raw.mask_48_edge_0_0_1);
-		resources.put("mask_48_edge_0_1_0", R.raw.mask_48_edge_0_1_0);
-		resources.put("mask_48_edge_0_1_1", R.raw.mask_48_edge_0_1_1);
-		resources.put("mask_48_edge_1_0_0", R.raw.mask_48_edge_1_0_0);
-		resources.put("mask_48_edge_1_0_1", R.raw.mask_48_edge_1_0_1);
-		resources.put("mask_48_edge_1_1_0", R.raw.mask_48_edge_1_1_0);
-		resources.put("mask_48_edge_1_1_1", R.raw.mask_48_edge_1_1_1);
-		resources.put("mask_48_full_0_0_0_0", R.raw.mask_48_full_0_0_0_0);
-		resources.put("mask_48_full_0_0_0_1", R.raw.mask_48_full_0_0_0_1);
-		resources.put("mask_48_full_0_0_1_0", R.raw.mask_48_full_0_0_1_0);
-		resources.put("mask_48_full_0_0_1_1", R.raw.mask_48_full_0_0_1_1);
-		resources.put("mask_48_full_0_1_0_0", R.raw.mask_48_full_0_1_0_0);
-		resources.put("mask_48_full_0_1_0_1", R.raw.mask_48_full_0_1_0_1);
-		resources.put("mask_48_full_0_1_1_0", R.raw.mask_48_full_0_1_1_0);
-		resources.put("mask_48_full_0_1_1_1", R.raw.mask_48_full_0_1_1_1);
-		resources.put("mask_48_full_1_0_0_0", R.raw.mask_48_full_1_0_0_0);
-		resources.put("mask_48_full_1_0_0_1", R.raw.mask_48_full_1_0_0_1);
-		resources.put("mask_48_full_1_0_1_0", R.raw.mask_48_full_1_0_1_0);
-		resources.put("mask_48_full_1_0_1_1", R.raw.mask_48_full_1_0_1_1);
-		resources.put("mask_48_full_1_1_0_0", R.raw.mask_48_full_1_1_0_0);
-		resources.put("mask_48_full_1_1_0_1", R.raw.mask_48_full_1_1_0_1);
-		resources.put("mask_48_full_1_1_1_0", R.raw.mask_48_full_1_1_1_0);
-		resources.put("mask_48_full_1_1_1_1", R.raw.mask_48_full_1_1_1_1);
-
-		//**************
-		resources.put("mask_64_corner_0_0", R.raw.mask_64_corner_0_0);
-		resources.put("mask_64_corner_0_1", R.raw.mask_64_corner_0_1);
-		resources.put("mask_64_corner_1_0", R.raw.mask_64_corner_1_0);
-		resources.put("mask_64_corner_1_1", R.raw.mask_64_corner_1_1);
-		resources.put("mask_64_edge_0_0_0", R.raw.mask_64_edge_0_0_0);
-		resources.put("mask_64_edge_0_0_1", R.raw.mask_64_edge_0_0_1);
-		resources.put("mask_64_edge_0_1_0", R.raw.mask_64_edge_0_1_0);
-		resources.put("mask_64_edge_0_1_1", R.raw.mask_64_edge_0_1_1);
-		resources.put("mask_64_edge_1_0_0", R.raw.mask_64_edge_1_0_0);
-		resources.put("mask_64_edge_1_0_1", R.raw.mask_64_edge_1_0_1);
-		resources.put("mask_64_edge_1_1_0", R.raw.mask_64_edge_1_1_0);
-		resources.put("mask_64_edge_1_1_1", R.raw.mask_64_edge_1_1_1);
-		resources.put("mask_64_full_0_0_0_0", R.raw.mask_64_full_0_0_0_0);
-		resources.put("mask_64_full_0_0_0_1", R.raw.mask_64_full_0_0_0_1);
-		resources.put("mask_64_full_0_0_1_0", R.raw.mask_64_full_0_0_1_0);
-		resources.put("mask_64_full_0_0_1_1", R.raw.mask_64_full_0_0_1_1);
-		resources.put("mask_64_full_0_1_0_0", R.raw.mask_64_full_0_1_0_0);
-		resources.put("mask_64_full_0_1_0_1", R.raw.mask_64_full_0_1_0_1);
-		resources.put("mask_64_full_0_1_1_0", R.raw.mask_64_full_0_1_1_0);
-		resources.put("mask_64_full_0_1_1_1", R.raw.mask_64_full_0_1_1_1);
-		resources.put("mask_64_full_1_0_0_0", R.raw.mask_64_full_1_0_0_0);
-		resources.put("mask_64_full_1_0_0_1", R.raw.mask_64_full_1_0_0_1);
-		resources.put("mask_64_full_1_0_1_0", R.raw.mask_64_full_1_0_1_0);
-		resources.put("mask_64_full_1_0_1_1", R.raw.mask_64_full_1_0_1_1);
-		resources.put("mask_64_full_1_1_0_0", R.raw.mask_64_full_1_1_0_0);
-		resources.put("mask_64_full_1_1_0_1", R.raw.mask_64_full_1_1_0_1);
-		resources.put("mask_64_full_1_1_1_0", R.raw.mask_64_full_1_1_1_0);
-		resources.put("mask_64_full_1_1_1_1", R.raw.mask_64_full_1_1_1_1);
-		/*******************/
-		resources.put("mask_240_corner_0_0", R.raw.mask_240_corner_0_0);
-		resources.put("mask_240_corner_0_1", R.raw.mask_240_corner_0_1);
-		resources.put("mask_240_corner_1_0", R.raw.mask_240_corner_1_0);
-		resources.put("mask_240_corner_1_1", R.raw.mask_240_corner_1_1);
-		resources.put("mask_240_edge_0_0_0", R.raw.mask_240_edge_0_0_0);
-		resources.put("mask_240_edge_0_0_1", R.raw.mask_240_edge_0_0_1);
-		resources.put("mask_240_edge_0_1_0", R.raw.mask_240_edge_0_1_0);
-		resources.put("mask_240_edge_0_1_1", R.raw.mask_240_edge_0_1_1);
-		resources.put("mask_240_edge_1_0_0", R.raw.mask_240_edge_1_0_0);
-		resources.put("mask_240_edge_1_0_1", R.raw.mask_240_edge_1_0_1);
-		resources.put("mask_240_edge_1_1_0", R.raw.mask_240_edge_1_1_0);
-		resources.put("mask_240_edge_1_1_1", R.raw.mask_240_edge_1_1_1);
-		resources.put("mask_240_full_0_0_0_0", R.raw.mask_240_full_0_0_0_0);
-		resources.put("mask_240_full_0_0_0_1", R.raw.mask_240_full_0_0_0_1);
-		resources.put("mask_240_full_0_0_1_0", R.raw.mask_240_full_0_0_1_0);
-		resources.put("mask_240_full_0_0_1_1", R.raw.mask_240_full_0_0_1_1);
-		resources.put("mask_240_full_0_1_0_0", R.raw.mask_240_full_0_1_0_0);
-		resources.put("mask_240_full_0_1_0_1", R.raw.mask_240_full_0_1_0_1);
-		resources.put("mask_240_full_0_1_1_0", R.raw.mask_240_full_0_1_1_0);
-		resources.put("mask_240_full_0_1_1_1", R.raw.mask_240_full_0_1_1_1);
-		resources.put("mask_240_full_1_0_0_0", R.raw.mask_240_full_1_0_0_0);
-		resources.put("mask_240_full_1_0_0_1", R.raw.mask_240_full_1_0_0_1);
-		resources.put("mask_240_full_1_0_1_0", R.raw.mask_240_full_1_0_1_0);
-		resources.put("mask_240_full_1_0_1_1", R.raw.mask_240_full_1_0_1_1);
-		resources.put("mask_240_full_1_1_0_0", R.raw.mask_240_full_1_1_0_0);
-		resources.put("mask_240_full_1_1_0_1", R.raw.mask_240_full_1_1_0_1);
-		resources.put("mask_240_full_1_1_1_0", R.raw.mask_240_full_1_1_1_0);
-		resources.put("mask_240_full_1_1_1_1", R.raw.mask_240_full_1_1_1_1);
+		resources.put("mask_256_corner_0_0", R.raw.mask_256_corner_0_0);
+		resources.put("mask_256_corner_0_1", R.raw.mask_256_corner_0_1);
+		resources.put("mask_256_corner_1_0", R.raw.mask_256_corner_1_0);
+		resources.put("mask_256_corner_1_1", R.raw.mask_256_corner_1_1);
+		resources.put("mask_256_edge_0_0_0", R.raw.mask_256_edge_0_0_0);
+		resources.put("mask_256_edge_0_0_1", R.raw.mask_256_edge_0_0_1);
+		resources.put("mask_256_edge_0_1_0", R.raw.mask_256_edge_0_1_0);
+		resources.put("mask_256_edge_0_1_1", R.raw.mask_256_edge_0_1_1);
+		resources.put("mask_256_edge_1_0_0", R.raw.mask_256_edge_1_0_0);
+		resources.put("mask_256_edge_1_0_1", R.raw.mask_256_edge_1_0_1);
+		resources.put("mask_256_edge_1_1_0", R.raw.mask_256_edge_1_1_0);
+		resources.put("mask_256_edge_1_1_1", R.raw.mask_256_edge_1_1_1);
+		resources.put("mask_256_full_0_0_0_0", R.raw.mask_256_full_0_0_0_0);
+		resources.put("mask_256_full_0_0_0_1", R.raw.mask_256_full_0_0_0_1);
+		resources.put("mask_256_full_0_0_1_0", R.raw.mask_256_full_0_0_1_0);
+		resources.put("mask_256_full_0_0_1_1", R.raw.mask_256_full_0_0_1_1);
+		resources.put("mask_256_full_0_1_0_0", R.raw.mask_256_full_0_1_0_0);
+		resources.put("mask_256_full_0_1_0_1", R.raw.mask_256_full_0_1_0_1);
+		resources.put("mask_256_full_0_1_1_0", R.raw.mask_256_full_0_1_1_0);
+		resources.put("mask_256_full_0_1_1_1", R.raw.mask_256_full_0_1_1_1);
+		resources.put("mask_256_full_1_0_0_0", R.raw.mask_256_full_1_0_0_0);
+		resources.put("mask_256_full_1_0_0_1", R.raw.mask_256_full_1_0_0_1);
+		resources.put("mask_256_full_1_0_1_0", R.raw.mask_256_full_1_0_1_0);
+		resources.put("mask_256_full_1_0_1_1", R.raw.mask_256_full_1_0_1_1);
+		resources.put("mask_256_full_1_1_0_0", R.raw.mask_256_full_1_1_0_0);
+		resources.put("mask_256_full_1_1_0_1", R.raw.mask_256_full_1_1_0_1);
+		resources.put("mask_256_full_1_1_1_0", R.raw.mask_256_full_1_1_1_0);
+		resources.put("mask_256_full_1_1_1_1", R.raw.mask_256_full_1_1_1_1);
 		
 		/**/
-		resources.put("mask_360_corner_0_0", R.raw.mask_240_corner_0_0);
-		resources.put("mask_360_corner_0_1", R.raw.mask_240_corner_0_1);
-		resources.put("mask_360_corner_1_0", R.raw.mask_240_corner_1_0);
-		resources.put("mask_360_corner_1_1", R.raw.mask_240_corner_1_1);
-		resources.put("mask_360_edge_0_0_0", R.raw.mask_240_edge_0_0_0);
-		resources.put("mask_360_edge_0_0_1", R.raw.mask_240_edge_0_0_1);
-		resources.put("mask_360_edge_0_1_0", R.raw.mask_240_edge_0_1_0);
-		resources.put("mask_360_edge_0_1_1", R.raw.mask_240_edge_0_1_1);
-		resources.put("mask_360_edge_1_0_0", R.raw.mask_240_edge_1_0_0);
-		resources.put("mask_360_edge_1_0_1", R.raw.mask_240_edge_1_0_1);
-		resources.put("mask_360_edge_1_1_0", R.raw.mask_240_edge_1_1_0);
-		resources.put("mask_360_edge_1_1_1", R.raw.mask_240_edge_1_1_1);
-		resources.put("mask_360_full_0_0_0_0", R.raw.mask_240_full_0_0_0_0);
-		resources.put("mask_360_full_0_0_0_1", R.raw.mask_240_full_0_0_0_1);
-		resources.put("mask_360_full_0_0_1_0", R.raw.mask_240_full_0_0_1_0);
-		resources.put("mask_360_full_0_0_1_1", R.raw.mask_240_full_0_0_1_1);
-		resources.put("mask_360_full_0_1_0_0", R.raw.mask_240_full_0_1_0_0);
-		resources.put("mask_360_full_0_1_0_1", R.raw.mask_240_full_0_1_0_1);
-		resources.put("mask_360_full_0_1_1_0", R.raw.mask_240_full_0_1_1_0);
-		resources.put("mask_360_full_0_1_1_1", R.raw.mask_240_full_0_1_1_1);
-		resources.put("mask_360_full_1_0_0_0", R.raw.mask_240_full_1_0_0_0);
-		resources.put("mask_360_full_1_0_0_1", R.raw.mask_240_full_1_0_0_1);
-		resources.put("mask_360_full_1_0_1_0", R.raw.mask_240_full_1_0_1_0);
-		resources.put("mask_360_full_1_0_1_1", R.raw.mask_240_full_1_0_1_1);
-		resources.put("mask_360_full_1_1_0_0", R.raw.mask_240_full_1_1_0_0);
-		resources.put("mask_360_full_1_1_0_1", R.raw.mask_240_full_1_1_0_1);
-		resources.put("mask_360_full_1_1_1_0", R.raw.mask_240_full_1_1_1_0);
-		resources.put("mask_360_full_1_1_1_1", R.raw.mask_240_full_1_1_1_1);
+		resources.put("mask_384_corner_0_0", R.raw.mask_384_corner_0_0);
+		resources.put("mask_384_corner_0_1", R.raw.mask_384_corner_0_1);
+		resources.put("mask_384_corner_1_0", R.raw.mask_384_corner_1_0);
+		resources.put("mask_384_corner_1_1", R.raw.mask_384_corner_1_1);
+		resources.put("mask_384_edge_0_0_0", R.raw.mask_384_edge_0_0_0);
+		resources.put("mask_384_edge_0_0_1", R.raw.mask_384_edge_0_0_1);
+		resources.put("mask_384_edge_0_1_0", R.raw.mask_384_edge_0_1_0);
+		resources.put("mask_384_edge_0_1_1", R.raw.mask_384_edge_0_1_1);
+		resources.put("mask_384_edge_1_0_0", R.raw.mask_384_edge_1_0_0);
+		resources.put("mask_384_edge_1_0_1", R.raw.mask_384_edge_1_0_1);
+		resources.put("mask_384_edge_1_1_0", R.raw.mask_384_edge_1_1_0);
+		resources.put("mask_384_edge_1_1_1", R.raw.mask_384_edge_1_1_1);
+		resources.put("mask_384_full_0_0_0_0", R.raw.mask_384_full_0_0_0_0);
+		resources.put("mask_384_full_0_0_0_1", R.raw.mask_384_full_0_0_0_1);
+		resources.put("mask_384_full_0_0_1_0", R.raw.mask_384_full_0_0_1_0);
+		resources.put("mask_384_full_0_0_1_1", R.raw.mask_384_full_0_0_1_1);
+		resources.put("mask_384_full_0_1_0_0", R.raw.mask_384_full_0_1_0_0);
+		resources.put("mask_384_full_0_1_0_1", R.raw.mask_384_full_0_1_0_1);
+		resources.put("mask_384_full_0_1_1_0", R.raw.mask_384_full_0_1_1_0);
+		resources.put("mask_384_full_0_1_1_1", R.raw.mask_384_full_0_1_1_1);
+		resources.put("mask_384_full_1_0_0_0", R.raw.mask_384_full_1_0_0_0);
+		resources.put("mask_384_full_1_0_0_1", R.raw.mask_384_full_1_0_0_1);
+		resources.put("mask_384_full_1_0_1_0", R.raw.mask_384_full_1_0_1_0);
+		resources.put("mask_384_full_1_0_1_1", R.raw.mask_384_full_1_0_1_1);
+		resources.put("mask_384_full_1_1_0_0", R.raw.mask_384_full_1_1_0_0);
+		resources.put("mask_384_full_1_1_0_1", R.raw.mask_384_full_1_1_0_1);
+		resources.put("mask_384_full_1_1_1_0", R.raw.mask_384_full_1_1_1_0);
+		resources.put("mask_384_full_1_1_1_1", R.raw.mask_384_full_1_1_1_1);
+		
+		resources.put("mask_192_corner_0_0", R.raw.mask_192_corner_0_0);
+		resources.put("mask_192_corner_0_1", R.raw.mask_192_corner_0_1);
+		resources.put("mask_192_corner_1_0", R.raw.mask_192_corner_1_0);
+		resources.put("mask_192_corner_1_1", R.raw.mask_192_corner_1_1);
+		resources.put("mask_192_edge_0_0_0", R.raw.mask_192_edge_0_0_0);
+		resources.put("mask_192_edge_0_0_1", R.raw.mask_192_edge_0_0_1);
+		resources.put("mask_192_edge_0_1_0", R.raw.mask_192_edge_0_1_0);
+		resources.put("mask_192_edge_0_1_1", R.raw.mask_192_edge_0_1_1);
+		resources.put("mask_192_edge_1_0_0", R.raw.mask_192_edge_1_0_0);
+		resources.put("mask_192_edge_1_0_1", R.raw.mask_192_edge_1_0_1);
+		resources.put("mask_192_edge_1_1_0", R.raw.mask_192_edge_1_1_0);
+		resources.put("mask_192_edge_1_1_1", R.raw.mask_192_edge_1_1_1);
+		resources.put("mask_192_full_0_0_0_0", R.raw.mask_192_full_0_0_0_0);
+		resources.put("mask_192_full_0_0_0_1", R.raw.mask_192_full_0_0_0_1);
+		resources.put("mask_192_full_0_0_1_0", R.raw.mask_192_full_0_0_1_0);
+		resources.put("mask_192_full_0_0_1_1", R.raw.mask_192_full_0_0_1_1);
+		resources.put("mask_192_full_0_1_0_0", R.raw.mask_192_full_0_1_0_0);
+		resources.put("mask_192_full_0_1_0_1", R.raw.mask_192_full_0_1_0_1);
+		resources.put("mask_192_full_0_1_1_0", R.raw.mask_192_full_0_1_1_0);
+		resources.put("mask_192_full_0_1_1_1", R.raw.mask_192_full_0_1_1_1);
+		resources.put("mask_192_full_1_0_0_0", R.raw.mask_192_full_1_0_0_0);
+		resources.put("mask_192_full_1_0_0_1", R.raw.mask_192_full_1_0_0_1);
+		resources.put("mask_192_full_1_0_1_0", R.raw.mask_192_full_1_0_1_0);
+		resources.put("mask_192_full_1_0_1_1", R.raw.mask_192_full_1_0_1_1);
+		resources.put("mask_192_full_1_1_0_0", R.raw.mask_192_full_1_1_0_0);
+		resources.put("mask_192_full_1_1_0_1", R.raw.mask_192_full_1_1_0_1);
+		resources.put("mask_192_full_1_1_1_0", R.raw.mask_192_full_1_1_1_0);
+		resources.put("mask_192_full_1_1_1_1", R.raw.mask_192_full_1_1_1_1);
 	}
 
 	private Bitmap loadBitmap()
@@ -241,9 +182,9 @@ public class Mask
 		if (difficulty == Difficulty.EASY)
 			name.append(difficulty.pieceSize()+"_");
 		else if (difficulty == Difficulty.MEDIUM)
-			name.append("48_");
+			name.append(difficulty.pieceSize()+"_");
 		else
-			name.append("32_");
+			name.append(difficulty.pieceSize()+"_");
 
 		if (type == Type.FULL)
 		{
