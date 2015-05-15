@@ -69,6 +69,7 @@ public class MainActivity extends Activity implements ConsoleMessage{
 	private int level = 0;
 	private int[] x_array;
 	private int[] y_array;
+	private int[] mask_array;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -202,8 +203,10 @@ public class MainActivity extends Activity implements ConsoleMessage{
 				if (!isReceivedMsg) {
 					level = levelSp.getSelectedItemPosition();
 					randomCoordinate(getRowCol(level));
+					randomMask(getRowCol(level));
 					msgService.sendMsg(msgService.structMessage("level_picture", levelSp.getSelectedItemPosition(), pictureIndex));
-					msgService.sendMsg(msgService.structMessage("coordinate", x_array, y_array));
+					msgService.sendMsg(msgService.structMessage("coordinate_mask", x_array, y_array, mask_array));
+					//msgService.sendMsg(msgService.structMessage("mask", mask_array));
 				}
 										
 				Bundle extras=new Bundle();
@@ -212,6 +215,7 @@ public class MainActivity extends Activity implements ConsoleMessage{
 				extras.putInt("puzzle", pictureIndex);
 				extras.putIntArray("xcoordinate", x_array);
 				extras.putIntArray("ycoordinate", y_array);
+				extras.putIntArray("mask", mask_array);
 				
 				Intent intent=new Intent(MainActivity.this, GameActivity.class);
 				intent.putExtras(extras);
@@ -257,6 +261,17 @@ public class MainActivity extends Activity implements ConsoleMessage{
 		for (int i = 0; i < x_array.length; i++) {
 			x_array[i] = RAN.nextInt(maxX);
 			y_array[i] = RAN.nextInt(maxY);
+		}
+	}
+	
+	protected void randomMask(int rowCol) {
+		mask_array = new int[rowCol*rowCol];
+		
+		for (int i = 0; i < mask_array.length; i++) {
+			if (RAN.nextBoolean()) 
+				mask_array[i] = 1;
+			else 
+				mask_array[i] = 0;
 		}
 	}
 	
@@ -357,8 +372,44 @@ public class MainActivity extends Activity implements ConsoleMessage{
 			for (int i = 0; i < y_array.length; i++) {
 				y_array[i] = Integer.parseInt(yCoordinate[i]);
 			}
-
-		}		
+		}
+		if (msg.getType().equals("coordinate_mask")) {
+			Log.i(TAG, "receiving coordinate_mask");
+			String[] coordinate_mask = new String[3];
+			coordinate_mask = msg.getMsg().split("_");
+			
+			String[] xCoordinate = new String[getRowCol(level)*getRowCol(level)];
+			xCoordinate = coordinate_mask[0].split(" ");
+			x_array = new int[xCoordinate.length];
+			for (int i = 0; i < x_array.length; i++) {
+				x_array[i] = Integer.parseInt(xCoordinate[i]);
+			}
+			
+			String[] yCoordinate = new String[getRowCol(level)*getRowCol(level)];
+			yCoordinate = coordinate_mask[1].split(" ");
+			y_array = new int[yCoordinate.length];
+			for (int i = 0; i < y_array.length; i++) {
+				y_array[i] = Integer.parseInt(yCoordinate[i]);
+			}
+			
+			String[] mask = new String[getRowCol(level)*getRowCol(level)];
+			mask = coordinate_mask[2].split(" ");
+			mask_array = new int[mask.length];
+			for (int i = 0; i < mask_array.length; i++){
+				mask_array[i] = Integer.parseInt(mask[i]);
+			}
+		}
+		if (msg.getType().equals("mask")) {
+			Log.i(TAG,"receiving mask");
+			String[] temp = new String[getRowCol(level)*getRowCol(level)];
+			temp = msg.getMsg().split("_");
+			
+			mask_array = new int[temp.length];
+			for (int i = 0; i < mask_array.length; i++){
+				mask_array[i] = Integer.parseInt(temp[i]);
+			}
+		}
+		
 	}
 	
 	private void initClientHandler() {

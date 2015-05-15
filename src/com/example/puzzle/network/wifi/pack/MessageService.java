@@ -31,6 +31,18 @@ public class MessageService {
 		//Log.i(TAG, "out sendMsg(Message msg) msg =" + msg);
 	}
 	
+	public String structMessage(String type, PuzzleGroup p) {
+		MyMessage msg = new MyMessage();
+		msg.setType(type);
+		msg.setDeviceName(deviceName);
+		msg.setNetAddress(deviceIp);
+		msg.setBigMsg(p);
+		gson = new Gson();
+		String s = gson.toJson(msg);
+		return s;
+		//return gson.toJson(msg);		
+	}
+	
 	public String structMessage(String type, int t1, int t2) {
 		MyMessage msg = new MyMessage();
 		msg.setType(type);

@@ -82,5 +82,8 @@ public class PuzzleGroup extends AbstractSharedRegister{
 			}
 			msgService.sendMsg(msgService.structMessage("updategroup", group_pieces));
 		}
+		if (type.equals("group")) {
+			msgService.sendMsg(msgService.structMessage("group", g));
+		}
 	}
 }

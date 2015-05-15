@@ -7,6 +7,16 @@ public class MyMessage {
 	private String msgTime;
 	private String type;
 
+	private Object bigMsg;
+	
+	public Object getBigMsg() {
+		return bigMsg;
+	}
+	
+	public void setBigMsg(Object o) {
+		bigMsg = o;
+	}
+	
 	public String getMsgTime() {
 		return msgTime;
 	}

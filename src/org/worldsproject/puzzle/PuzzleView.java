@@ -50,6 +50,7 @@ public class PuzzleView extends View implements OnGestureListener,
 	private Context context;
 	private int[] x_array;
 	private int[] y_array;
+	private boolean[] mask_array;
 	
 	private MessageService msgService = new MessageService(Global.APP, Global.DEVICENAME, Global.IP);
 	private Gson gson;
@@ -79,8 +80,9 @@ public class PuzzleView extends View implements OnGestureListener,
 		gesture = new GestureDetector(this.getContext(), this);
 		scaleGesture = new ScaleGestureDetector(this.getContext(), this);		
 		
-		puzzle = new PuzzleGenerator(this.getContext()).generatePuzzle(
-				this.getContext(), image, difficulty, location);
+		PuzzleGenerator temp = new PuzzleGenerator(this.getContext());
+		temp.setMask(mask_array);
+		puzzle = temp.generatePuzzle(this.getContext(), image, difficulty, location);
 		puzzle.savePuzzle(getContext(), location, true);
 		
 		Log.i(TAG, "out load puzzle");
@@ -479,6 +481,17 @@ public class PuzzleView extends View implements OnGestureListener,
 			this.y_array[i] = y_array[i];
 	}
 	
+
+	public void setMask(int[] mask_array) {
+		this.mask_array = new boolean[mask_array.length];
+		for (int i = 0; i < mask_array.length; i++) {
+			if (mask_array[i] == 1)
+				this.mask_array[i] = true;
+			else
+				this.mask_array[i] = false;
+		}
+	}
+	
 	private void initServerListener() {
 
 		if (Global.APP.server == null) {
@@ -626,6 +639,14 @@ public class PuzzleView extends View implements OnGestureListener,
 				}
 			}
 		}
+		
+		if (msg.getType().equals("group") && !msg.getNetAddress().equals(Global.IP)) {
+			PuzzleGroup g = (PuzzleGroup)msg.getBigMsg();
+			for (Piece p: g.getGroup()) {
+				puzzle.getPieces().get(p.getSerial()-1).setGroup(g);
+			}
+		}
+		
 		if (msg.getType().equals("finished") && !msg.getNetAddress().equals(Global.IP)) {
 			this.invalidate();
 			openFinishDialog();
@@ -638,4 +659,5 @@ public class PuzzleView extends View implements OnGestureListener,
 		initServerListener();
 		initClientListener();
 	}
+
 }

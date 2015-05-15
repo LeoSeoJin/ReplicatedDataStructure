@@ -26,9 +26,8 @@ public class PuzzleGenerator {
 	private Bitmap foreground;
 	private int pieceSize;
 	private Difficulty difficulty;
-
-	Random ran = new Random();
-
+	private boolean[] mask_array;
+	
 	public PuzzleGenerator(Context c) {
 		this.context = c;
 	}
@@ -61,7 +60,7 @@ public class PuzzleGenerator {
 		// each mask
 		// knows who its neighbors are. We do not need to represent that again.
 		Mask[] masks = new Mask[puzzle_width * puzzle_height];
-
+		
 		// Now we have an image that is able to be cut up perfectly.
 		// We should start by generating a corner.
 		Mask startPoint = getRandomCorner();
@@ -88,16 +87,14 @@ public class PuzzleGenerator {
 				corner_number++;
 
 				if (corner_number == 1) {
-					masks[i] = new Mask(context, RB(), !masks[i - 1].isRight(),
-							difficulty);
+					//masks[i] = new Mask(context, RB(), !masks[i - 1].isRight(), difficulty);
+					masks[i] = new Mask(context, mask_array[i], !masks[i - 1].isRight(), difficulty);
 					masks[i].rotate(2);
 				} else if (corner_number == 2) {
-					masks[i] = new Mask(context,
-							!masks[i - puzzle_width].isBottom(), RB(),
-							difficulty);
+					//masks[i] = new Mask(context, !masks[i - puzzle_width].isBottom(), RB(), difficulty);
+					masks[i] = new Mask(context, !masks[i - puzzle_width].isBottom(), mask_array[i], difficulty);
 				} else if (corner_number == 3) {
-					masks[i] = new Mask(context, !masks[i - 1].isRight(),
-							!masks[i - puzzle_width].isBottom(), difficulty);
+					masks[i] = new Mask(context, !masks[i - 1].isRight(), !masks[i - puzzle_width].isBottom(), difficulty);
 					masks[i].rotate(3);
 				}
 				continue;
@@ -105,16 +102,16 @@ public class PuzzleGenerator {
 
 			// This is all of the top edge cases.
 			if (corner_number < 1) {
-				masks[i] = new Mask(context, RB(), RB(),
-						!masks[i - 1].isRight(), difficulty);
+				//masks[i] = new Mask(context, RB(), RB(),!masks[i - 1].isRight(), difficulty);
+				masks[i] = new Mask(context, mask_array[i], mask_array[i], !masks[i - 1].isRight(), difficulty);
 				masks[i].rotate(1);
 				continue;
 			}
 
 			// This handles all of the bottom edge cases.
 			if (corner_number == 2) {
-				masks[i] = new Mask(context, !masks[i - 1].isRight(), !masks[i
-						- puzzle_width].isBottom(), RB(), difficulty);
+				//masks[i] = new Mask(context, !masks[i - 1].isRight(), !masks[i - puzzle_width].isBottom(), RB(), difficulty);
+				masks[i] = new Mask(context, !masks[i - 1].isRight(), !masks[i - puzzle_width].isBottom(), mask_array[i], difficulty);
 				masks[i].rotate(3);
 				continue;
 			}
@@ -124,12 +121,11 @@ public class PuzzleGenerator {
 			// and right edges, so we can safely toggle.
 			if (isEdge(i, puzzle_width, puzzle_height)) {
 				if (left_edge) {
-					masks[i] = new Mask(context,
-							!masks[i - puzzle_width].isBottom(), RB(), RB(),
-							difficulty);
+					//masks[i] = new Mask(context,!masks[i - puzzle_width].isBottom(), RB(), RB(),difficulty);
+					masks[i] = new Mask(context,!masks[i - puzzle_width].isBottom(), mask_array[i], mask_array[i], difficulty);
 				} else {
-					masks[i] = new Mask(context, RB(), !masks[i - 1].isRight(),
-							!masks[i - puzzle_width].isBottom(), difficulty);
+					//masks[i] = new Mask(context, RB(), !masks[i - 1].isRight(),!masks[i - puzzle_width].isBottom(), difficulty);
+					masks[i] = new Mask(context, mask_array[i], !masks[i - 1].isRight(),!masks[i - puzzle_width].isBottom(), difficulty);
 					masks[i].rotate(2);
 				}
 
@@ -138,8 +134,8 @@ public class PuzzleGenerator {
 			}
 
 			// The only possible option now are the full pieces.
-			masks[i] = new Mask(context, !(masks[i - puzzle_width].isBottom()),
-					RB(), RB(), !(masks[i - 1].isRight()), difficulty);
+			//masks[i] = new Mask(context, !(masks[i - puzzle_width].isBottom()),RB(), RB(), !(masks[i - 1].isRight()), difficulty);
+			masks[i] = new Mask(context, !(masks[i - puzzle_width].isBottom()),mask_array[i], mask_array[i], !(masks[i - 1].isRight()), difficulty);
 		}
 
 		Bitmap[] images = new Bitmap[masks.length];
@@ -197,7 +193,8 @@ public class PuzzleGenerator {
 	 * int from [0,4) and choose a corresponding corner.
 	 */
 	private Mask getRandomCorner() {
-		int which = RAN.nextInt(4);
+		//int which = RAN.nextInt(4);
+		int which = 1;
 		Mask rv;
 		System.out.println("which "+which);
 		switch (which) {
@@ -244,5 +241,9 @@ public class PuzzleGenerator {
 
 	private boolean RB() {
 		return RAN.nextBoolean();
+	}
+	
+	public void setMask(boolean[] array) {
+		this.mask_array = array;
 	}
 }

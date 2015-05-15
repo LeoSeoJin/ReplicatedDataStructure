@@ -16,22 +16,20 @@ import android.util.Log;
 public class Mask
 {
 	private static HashMap<String, Integer> resources = new HashMap<String, Integer>();
-
+	
 	private boolean top;
 	private boolean right;
 	private boolean bottom;
 	private boolean left;
 
 	private Type type;
-
 	private Bitmap mask;
-
 	private Context context;
-
-	private Difficulty difficulty;
-	
+	private Difficulty difficulty;	
 	private int offset;
 
+	private String resourceName;
+	
 	public Mask(Context context, boolean top, boolean right,
 			Difficulty difficulty)
 	{
@@ -63,7 +61,6 @@ public class Mask
 		this.difficulty = difficulty;
 
 		fillResourceMapping();
-		//System.out.println("*******************fillresourcemapping");
 		
 		// Here we have to account for all that transparent border.
 		// We should be making pieces off of the square area
@@ -208,6 +205,8 @@ public class Mask
 			append(top, name);
 			append(right, name);
 		}
+		
+		this.resourceName = name.toString();
 		
 		System.out.println("resource_name "+name.toString());
 		

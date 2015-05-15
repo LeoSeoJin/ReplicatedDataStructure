@@ -54,16 +54,11 @@ public class GameActivity extends Activity{
 		Bundle extras=this.getIntent().getExtras();
 		int level=extras.getInt("level");
 		puzzle = extras.getInt("puzzle");
-		int[] x_array = extras.getIntArray("xcoordinate");
-		for (int p: x_array)
-			Log.i(TAG, "x_array "+p);
-		
-		int[] y_array = extras.getIntArray("ycoordinate");
-		for (int p: x_array)
-			Log.i(TAG, "x_array "+p);
-		
-		System.out.println("picture_index "+puzzle);
-		
+		int[] x_array = extras.getIntArray("xcoordinate");		
+		int[] y_array = extras.getIntArray("ycoordinate");		
+		int[] mask_array = extras.getIntArray("mask");
+				
+				
     	if(0==puzzle){
    			image=BitmapFactory.decodeResource(getResources(),R.drawable.img10);
    	 	}else if(1==puzzle){
@@ -108,6 +103,7 @@ public class GameActivity extends Activity{
     	Log.i(TAG,"level "+level+" p "+puzzle);
     	
     	pv.setCoordinate(x_array, y_array);
+    	pv.setMask(mask_array);
     	pv.loadPuzzle(image, x, path(puzzle, x.toString()));
     	pv.initServerClient();
  		pv.setContext(this);

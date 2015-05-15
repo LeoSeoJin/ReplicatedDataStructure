@@ -218,7 +218,8 @@ public class Piece{
 		}
 
 		this.group.addGroup(p.getGroup());
-		this.group.write("updategroup", this.group);
+		this.group.write("group", this.group);
+		//this.group.write("updategroup", this.group);
 	}
 
 	public int getSerial() {
