@@ -1,5 +1,10 @@
 package com.example.puzzle.network.wifi.pack;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.worldsproject.puzzle.Piece.S;
 import org.worldsproject.puzzle.PuzzleGroup;
 
 import android.util.Log;
@@ -10,6 +15,7 @@ import com.google.gson.Gson;
 
 public class MessageService {
 	private static final String TAG = "MessageService";
+	private static DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	private WifiApplication app;
 	private String deviceName;
 	private String deviceIp;
@@ -36,7 +42,10 @@ public class MessageService {
 		msg.setType(type);
 		msg.setDeviceName(deviceName);
 		msg.setNetAddress(deviceIp);
-		msg.setBigMsg(p);
+		msg.setMsgTime(df.format(new Date()));
+
+		gson = new Gson();
+		msg.setMsg(gson.toJson(p));
 		gson = new Gson();
 		String s = gson.toJson(msg);
 		return s;
@@ -48,6 +57,7 @@ public class MessageService {
 		msg.setType(type);
 		msg.setDeviceName(deviceName);
 		msg.setNetAddress(deviceIp);
+		msg.setMsgTime(df.format(new Date()));
 		msg.setMsg(Integer.toString(t1)+"_"+Integer.toString(t2));
 		gson = new Gson();
 		return gson.toJson(msg);
@@ -57,7 +67,8 @@ public class MessageService {
 		MyMessage msg = new MyMessage();
 		msg.setType(type);
 		msg.setDeviceName(deviceName);
-		msg.setNetAddress(deviceIp);	
+		msg.setNetAddress(deviceIp);
+		msg.setMsgTime(df.format(new Date()));
 		StringBuffer text = new StringBuffer("");
 		for (int p: x) {
 			text.append(p);
@@ -78,6 +89,7 @@ public class MessageService {
 		msg.setType(type);
 		msg.setDeviceName(deviceName);
 		msg.setNetAddress(deviceIp);
+		msg.setMsgTime(df.format(new Date()));
 		msg.setMsg(Integer.toString(text));
 		gson = new Gson();
 		return gson.toJson(msg);
@@ -88,7 +100,8 @@ public class MessageService {
 		msg.setType(type);
 		msg.setDeviceName(deviceName);
 		msg.setNetAddress(deviceIp);
-
+		msg.setMsgTime(df.format(new Date()));
+		
 		StringBuffer text = new StringBuffer("");
 		for (int p: array) {
 			text.append(p);
@@ -105,7 +118,8 @@ public class MessageService {
 		msg.setType(type);
 		msg.setDeviceName(deviceName);
 		msg.setNetAddress(deviceIp);
-
+		msg.setMsgTime(df.format(new Date()));
+		
 		String text;
 		if (isOnDown) 
 			text = "true";
@@ -121,7 +135,9 @@ public class MessageService {
 		MyMessage msg = new MyMessage();
 		msg.setType(type);
 		msg.setDeviceName(deviceName);
-		msg.setNetAddress(deviceIp);	
+		msg.setNetAddress(deviceIp);
+		msg.setMsgTime(df.format(new Date()));
+		
 		StringBuffer text = new StringBuffer("");
 		for (int i: p) {
 			text.append(i);
@@ -139,6 +155,20 @@ public class MessageService {
 		}
 		msg.setMsg(text.toString());
 		gson = new Gson();
+		return gson.toJson(msg);
+	}
+
+	public String structMessage(String type, S s) {
+		MyMessage msg = new MyMessage();
+		msg.setType(type);
+		msg.setDeviceName(deviceName);
+		msg.setNetAddress(deviceIp);
+		msg.setMsgTime(df.format(new Date()));
+		
+		gson = new Gson();
+		msg.setMsg(gson.toJson(s));
+		gson = new Gson();
+		
 		return gson.toJson(msg);
 	}
 }

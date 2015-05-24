@@ -15,6 +15,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -28,7 +30,10 @@ public class GameActivity extends Activity{
 	private Difficulty x;
 	private int puzzle;
 	private Bitmap image;
-
+	
+	public static SoundPool sp;
+	public static int music;
+	
 	public static Resources resource;
 	public List<MyMessage> Messages = new ArrayList<MyMessage>();
 	
@@ -87,7 +92,10 @@ public class GameActivity extends Activity{
     	} else {
     		x = Difficulty.HARD;		 
     	}
-    	 
+
+    	sp= new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
+    	music = sp.load(this, R.raw.error1, 1);
+
     	pv = (PuzzleView) this.findViewById(R.id.puzzleView);
  		//File testExistance = new File(path(puzzle, x.toString()));
 
@@ -107,7 +115,6 @@ public class GameActivity extends Activity{
     	pv.loadPuzzle(image, x, path(puzzle, x.toString()));
     	pv.initServerClient();
  		pv.setContext(this);
- 		
     }
     
 	@Override

@@ -1,14 +1,21 @@
 package org.worldsproject.puzzle;
 
+import java.io.Serializable;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.widget.ImageView;
 
 @SuppressLint("NewApi")
-public class Piece{
+public class Piece implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static int idSource = 0;
 	private final int serial = ++idSource;
 	private int x = 0;
@@ -19,7 +26,7 @@ public class Piece{
 	private Piece bottom = null;
 	private Piece left = null;
 
-	private PuzzleGroup group;
+	private transient PuzzleGroup group;
 
 	private Bitmap original;
 	private Bitmap display;
@@ -57,10 +64,30 @@ public class Piece{
 		}
 	}
 
-	public void draw(Canvas c) {
-		c.drawBitmap(display, x, y, null);
+	public void draw(Canvas c, boolean down) {
+		if (!down) {
+			c.drawBitmap(display, x, y, null);
+		} else {
+			Paint paint = new Paint();  
+            paint .setStyle(Paint.Style.STROKE);   //¿ÕÐÄ  
+            paint .setAlpha(75); 
+            c.drawBitmap(display, x, y, paint);
+		}
+			
 	}
 
+	public Bitmap getDisplay() {
+		return display;
+	}
+	
+	public void setDisplay(Bitmap bitmap) {
+		display = bitmap;
+	}
+	
+	public ImageView getImage() {
+		return image;
+	}
+	
 	public Piece getTop() {
 		return top;
 	}
@@ -218,8 +245,9 @@ public class Piece{
 		}
 
 		this.group.addGroup(p.getGroup());
-		this.group.write("group", this.group);
-		//this.group.write("updategroup", this.group);
+		//this.group.write("group", this.group);
+		this.group.write("updategroup", this.group);
+		//this.group.write("test", new S());
 	}
 
 	public int getSerial() {
@@ -240,5 +268,19 @@ public class Piece{
 	
 	public static void resetSerial() {
 		idSource = 0;
+	}
+	
+	public class S {
+		public String t1;
+		public String t2;
+		public String[] temp;
+		
+		private S() {
+			t1 = "asdf";
+			t2 = "dsdf";
+			temp = new String[2];
+			temp[0] = t1;
+			temp[1] = t2;
+		}
 	}
 }

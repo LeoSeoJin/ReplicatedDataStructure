@@ -1,13 +1,20 @@
 package org.worldsproject.puzzle;
 
+import java.io.Serializable;
 import java.util.HashSet;
+
+import org.worldsproject.puzzle.Piece.S;
 
 import com.example.puzzle.GameActivity;
 import com.example.puzzle.network.wifi.pack.Global;
 import com.example.puzzle.network.wifi.pack.MessageService;
 import com.example.puzzle.sharedMemory.AbstractSharedRegister;
 
-public class PuzzleGroup extends AbstractSharedRegister{
+public class PuzzleGroup extends AbstractSharedRegister implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static int idSource = 0;
 	private final int serial = ++idSource;
 	
@@ -85,5 +92,9 @@ public class PuzzleGroup extends AbstractSharedRegister{
 		if (type.equals("group")) {
 			msgService.sendMsg(msgService.structMessage("group", g));
 		}
+	}
+
+	public void write(String type, S s) {
+		msgService.sendMsg(msgService.structMessage(type, s));
 	}
 }

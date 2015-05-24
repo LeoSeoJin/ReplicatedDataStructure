@@ -92,7 +92,7 @@ public class Puzzle {
 
 	public void draw(Canvas c) {
 		for (Piece p : this.pieces) {
-			p.draw(c);
+			p.draw(c, p.getIsOnDown());
 		}
 	}
 
