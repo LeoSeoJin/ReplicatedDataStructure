@@ -92,7 +92,8 @@ public class Puzzle {
 
 	public void draw(Canvas c) {
 		for (Piece p : this.pieces) {
-			p.draw(c, p.getIsOnDown());
+			p.draw(c, p.getFilter());
+			//p.draw(c, p.getIsOnDown());
 		}
 	}
 

@@ -20,7 +20,8 @@ public class Piece implements Serializable{
 	private final int serial = ++idSource;
 	private int x = 0;
 	private int y = 0;
-
+	private boolean filter = false;
+	
 	private Piece top = null;
 	private Piece right = null;
 	private Piece bottom = null;
@@ -64,8 +65,9 @@ public class Piece implements Serializable{
 		}
 	}
 
-	public void draw(Canvas c, boolean down) {
-		if (!down) {
+	public void draw(Canvas c, boolean flag) {
+		/**
+		if (!flag) {
 			c.drawBitmap(display, x, y, null);
 		} else {
 			Paint paint = new Paint();  
@@ -73,6 +75,8 @@ public class Piece implements Serializable{
             paint .setAlpha(75); 
             c.drawBitmap(display, x, y, paint);
 		}
+		**/
+		c.drawBitmap(display, x, y, null);
 			
 	}
 
@@ -282,5 +286,13 @@ public class Piece implements Serializable{
 			temp[0] = t1;
 			temp[1] = t2;
 		}
+	}
+
+	public void setF(boolean b) {
+		filter = b;
+	}
+	
+	public boolean getFilter() {
+		return filter;
 	}
 }

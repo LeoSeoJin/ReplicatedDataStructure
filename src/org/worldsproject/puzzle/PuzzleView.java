@@ -2,13 +2,13 @@ package org.worldsproject.puzzle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import org.worldsproject.puzzle.Piece.S;
 import org.worldsproject.puzzle.enums.Difficulty;
 
 import com.example.puzzle.GameActivity;
 import com.example.puzzle.R;
-import com.example.puzzle.network.wifi.pack.ConsoleMessage;
 import com.example.puzzle.network.wifi.pack.Global;
 import com.example.puzzle.network.wifi.pack.MessageService;
 import com.example.puzzle.network.wifi.pack.MyMessage;
@@ -24,7 +24,6 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.media.SoundPool;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -41,7 +40,7 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 
 public class PuzzleView extends View implements OnGestureListener,
-		OnDoubleTapListener, OnScaleGestureListener, AnimationListener, ConsoleMessage {
+		OnDoubleTapListener, OnScaleGestureListener, AnimationListener {
 	private static final String TAG = "PuzzleView";
     
 	private Puzzle puzzle;
@@ -60,7 +59,9 @@ public class PuzzleView extends View implements OnGestureListener,
 	private Gson gson;
 	private Handler serverHandler;
 	private Handler clientHandler;
+	private CountDownLatch latch;
 	public List<MyMessage> messages = new ArrayList<MyMessage>();
+	public List<MyMessage> ack_messages = new ArrayList<MyMessage>();
 	
 	public PuzzleView(Context context) {
 		super(context);
@@ -146,18 +147,21 @@ public class PuzzleView extends View implements OnGestureListener,
 
 		scaleGesture.onTouchEvent(event);
 		gesture.onTouchEvent(event);
-
+		
 		if(event.getAction()== MotionEvent.ACTION_UP){
         	Log.i(TAG, "@@@@@@@@@@@@@@@@@@@@@@@action up");
+        	Log.i(TAG,"++++++ tapped "+(tapped==null));
             if (tapped != null) {
             	for (Piece p: tapped.getGroup().getGroup()) {
             		Log.i(TAG,"piece "+p.getSerial());
             		p.setIsOnDown(false);
-            		removeFilter();
+            		p.setF(false);
             	}
             }
             invalidate();
         	tapped = null;
+        	//setLatch(1);
+        	//GameActivity.latch = new CountDownLatch(1);
         	Log.i(TAG, "@@@@@@@@@@@@@@@@@@@@@@@action up down");
         	
 		}
@@ -197,7 +201,7 @@ public class PuzzleView extends View implements OnGestureListener,
 		Log.i(TAG,"**********onDown");
 		Piece possibleNewTapped = null;
 		boolean shouldPan = true;
-
+		GameActivity.latch = new CountDownLatch(1);
 		for (int i = this.puzzle.getPieces().size()-1; i >= 0; i--) {
 			Piece p = this.puzzle.getPieces().get(i);
 			
@@ -229,20 +233,22 @@ public class PuzzleView extends View implements OnGestureListener,
 		
 		//Log.i(TAG,"tapped"+tapped);
 		if (tapped != null) { 
-			tapped.setIsOnDown(true);
-			
-			GameActivity.sp.play(GameActivity.music, 1, 1, 0, 0, 1); 
-			
-			setFilter(-80);
-			
+			//tapped.setIsOnDown(true);
+							
 			Log.i(TAG, ""+tapped.getSerial()+" is onDown");
 			/*get the state of tapped on others'*/
 			boolean isOtherOnDown = isOtherOnDown(readPhase(tapped));
-			removeMsg(tapped); //remove the ack messages for next receive process 
+			//removeMsg(tapped); //remove the ack messages for next receive process 
 			if (isOtherOnDown) {
+				//GameActivity.sp.play(GameActivity.music, 1, 1, 0, 0, 1); 
+				tapped.setF(true);
+				
 				warnDialog();
-				//setFilter();
+				Log.i(TAG,"^^^^^^^^^^^^warndialog");
+				
 				tapped = null;
+			} else {
+				tapped.setIsOnDown(true);
 			}
 		}
 
@@ -263,33 +269,59 @@ public class PuzzleView extends View implements OnGestureListener,
 		else 
 			return false;
 	}
-	
+		
 	private ArrayList<String> readPhase(Piece p) {
 		msgService.sendMsg(msgService.structMessage("readpiece", p.getSerial()));
+		//**
+		try
+		{
+			Log.i(TAG,"!!!!!!!!!!!! latch ");
+			GameActivity.latch.await();
+			Log.i(TAG,"!!!!!!!!!!!! latch open");
+		} catch (InterruptedException ie)
+		{
+			Log.e(TAG, ie.getMessage());
+			ie.printStackTrace();
+		}
+		/**/
 		ArrayList<String> result = new ArrayList<String>();
-		for (MyMessage m: messages) {
+		
+		
+		for (MyMessage m: ack_messages) {
+			Log.i(TAG, "ack_message "+m+" "+m.getType());
+			
 			if (m.getType().equals("ack_readpiece"+"_"+p.getSerial())) {
-				Log.i(TAG,"%%%%%%% "+m.getMsgTime());
-				result.add(m.getMsg());
+				Log.i(TAG,"%%%%%%% "+m+" "+m.getType());
+				result.add(new String(m.getMsg()));
 			}
 		}
+		//ack_messages.clear();
 		Log.i(TAG,"readphase "+result.size());
 		
-		return result;
+		return result; 
 	}
 	
 	private void removeMsg(Piece p) {
-		Log.i(TAG,"$$$$$$$$$$$$$$$$$$$remove message "+p.getSerial());
-		if (messages.size() == 0) return;
+		Log.i(TAG,"$$$$$$$$$$$$$$$$$$$remove message "+p.getSerial()+" size "+ack_messages.size());
+		if (ack_messages.size() == 0) return;
 		
-		for (int i = 0; i < messages.size(); i++) {
-			if (messages.get(i).getType().equals("ack_readpiece"+"_"+p.getSerial())) {
-				messages.remove(i--);
-				Log.i(TAG,"message.size "+messages.size());
+		for (int i = ack_messages.size()-1; i >= 0; i--) {
+			if (ack_messages.get(i).getType().equals("ack_readpiece"+"_"+p.getSerial())) {
+				ack_messages.remove(i);
+				
 			}
 		}
+		
+		Log.i(TAG,"ack_message.size "+ack_messages.size());
 	}
 
+	private void removeMsg() {
+		if (ack_messages.size() == 0) return;
+		for (int i = ack_messages.size()-1; i >= 0; i--) {
+				ack_messages.remove(i);
+		}
+	}
+	
 	private void warnDialog(){	
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setIcon(R.drawable.alert_dialog_icon);
@@ -303,31 +335,7 @@ public class PuzzleView extends View implements OnGestureListener,
 				});
 		builder.create().show();
 	}
-	
-	private void setFilter(int brightness) {
-		Log.i(TAG, "**************setfilter*****************");
-		/**
-		Drawable image = tapped.getImage().getDrawable();
-		image.setColorFilter(Color.TRANSPARENT,PorterDuff.Mode.MULTIPLY);
-		tapped.getImage().setImageDrawable(image);
-		**/
-		/**
-		ColorMatrix matrix = new ColorMatrix();  
-	    matrix.set(new float[] { 1, 0, 0, 0, brightness, 0, 1, 0, 0, brightness, 0, 0, 1, 0, brightness, 0, 0, 0, 1, 0 });  
-	    tapped.getImage().setColorFilter(new ColorMatrixColorFilter(matrix));  
-		**/		
-	}
-	
-	private void removeFilter() {
-        Drawable drawable=tapped.getImage().getDrawable();
-        if (drawable==null) {
-            drawable=getBackground();
-        }
-        if(drawable!=null){
-            drawable.clearColorFilter();
-        }
-	}
-	
+
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) {
@@ -413,10 +421,7 @@ public class PuzzleView extends View implements OnGestureListener,
 
 		if (isFinished(tapped)) 
 			openFinishDialog();
-		
-		if (tapped != null) {
-			removeFilter();
-		}		
+			
 		return true;
 	}
 
@@ -552,6 +557,13 @@ public class PuzzleView extends View implements OnGestureListener,
 				Log.i(TAG, "into initServerListener() handlerHotMsg(String hotMsg) hotMsg = " + hotMsg);
 				msg = serverHandler.obtainMessage();
 				msg.obj = hotMsg;
+				//serverHandler.sendMessage(msg);
+				MyMessage m = new Gson().fromJson((String) msg.obj, MyMessage.class);
+				if (m.getType().contains("ack_readpiece")) {
+					GameActivity.latch.countDown();
+					removeMsg();
+					ack_messages.add(m);
+				}
 				serverHandler.sendMessage(msg);
 			}
 
@@ -575,10 +587,22 @@ public class PuzzleView extends View implements OnGestureListener,
 
 			@Override
 			public void handlerHotMsg(String hotMsg) {
-				//Log.i(TAG, "into initClientListener() handlerHotMsg(String hotMsg) hotMsg = " + hotMsg);
+				Log.i(TAG, "into initClientListener() handlerHotMsg(String hotMsg) hotMsg = " + hotMsg);
 				msg = clientHandler.obtainMessage();
 				msg.obj = hotMsg;
+				Log.i(TAG, "111111");
+				//clientHandler.sendMessage(msg);
+				//**
+				MyMessage m = new Gson().fromJson((String) msg.obj, MyMessage.class);
+				if (m.getType().contains("ack_readpiece")) {
+					GameActivity.latch.countDown();
+					removeMsg();
+					ack_messages.add(m);
+				}
+				
 				clientHandler.sendMessage(msg);
+				/**/
+				Log.i(TAG, "22222");
 			}
 
 			@Override
@@ -589,6 +613,7 @@ public class PuzzleView extends View implements OnGestureListener,
 		Log.i(TAG, "out initClientListener()");
 	}
 
+	@SuppressLint("HandlerLeak")
 	private void initServerHandler() {
 		if (Global.APP.server == null) {
 			Log.i(TAG,"app.server is null");
@@ -603,12 +628,13 @@ public class PuzzleView extends View implements OnGestureListener,
 				gson = new Gson();
 				MyMessage Msg = gson.fromJson(text, MyMessage.class);
 				messages.add(Msg);
-				console(Msg);
+				console(Msg, ack_messages);
 				Log.i(TAG, "into initServerHandler() handleMessage(Message msg) chatMessage = " + Msg);
 			}
 		};
 	}
 
+	@SuppressLint("HandlerLeak")
 	private void initClientHandler() {
 		if (Global.APP.client == null) {
 			Log.i(TAG,"app.client is null");
@@ -617,22 +643,20 @@ public class PuzzleView extends View implements OnGestureListener,
 		clientHandler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
-				//Log.i(TAG, "into initClientHandler() handleMessage(Message msg)");
+				Log.i(TAG, "into initClientHandler() handleMessage(Message msg)");
 				String text = (String) msg.obj;
 				gson = new Gson();
 				MyMessage Msg = gson.fromJson(text, MyMessage.class);
 				messages.add(Msg);
 				
-				console(Msg);
+				console(Msg, ack_messages);
 				
-				//Log.i(TAG, "into initClientHandler() handleMessage(Message msg) chatMessage =" + Msg);
+				Log.i(TAG, "into initClientHandler() handleMessage(Message msg) chatMessage =" + Msg);
 			}
 		};
 	}
 
-
-	@Override
-	public void console(MyMessage msg) {
+	public void console(MyMessage msg, List<MyMessage> list) {
 		if (msg.getType().equals("readpiece") && !msg.getNetAddress().equals(Global.IP)) {
 			int serial = Integer.parseInt(msg.getMsg());
 			PuzzleGroup temp = puzzle.getPieces().get(serial-1).getGroup();
@@ -650,6 +674,10 @@ public class PuzzleView extends View implements OnGestureListener,
 			msgService.sendMsg(msgService.structMessage("ack_readpiece"+"_"+serial, ack));
 			messages.remove(msg); //remove the "readpiece" message;
 		}
+		if (msg.getType().contains("ack_readpiece") && !msg.getNetAddress().equals(Global.IP)) {
+			Log.i(TAG,"ack_readpiece msg");
+		}
+		
 		if (msg.getType().equals("writepiece") && !msg.getNetAddress().equals(Global.IP)) {
 			Log.i(TAG,"writepiece msg");
 			String[] pxy = new String[3];
@@ -710,5 +738,9 @@ public class PuzzleView extends View implements OnGestureListener,
 		initClientHandler();
 		initServerListener();
 		initClientListener();
+	}
+
+	public void setLatch(int i) {
+		this.latch = new CountDownLatch(1);
 	}
 }

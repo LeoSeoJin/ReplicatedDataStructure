@@ -2,6 +2,7 @@ package com.example.puzzle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import org.worldsproject.puzzle.PuzzleView;
 import org.worldsproject.puzzle.enums.Difficulty;
@@ -33,6 +34,8 @@ public class GameActivity extends Activity{
 	
 	public static SoundPool sp;
 	public static int music;
+	
+	public static CountDownLatch latch;
 	
 	public static Resources resource;
 	public List<MyMessage> Messages = new ArrayList<MyMessage>();
@@ -112,6 +115,8 @@ public class GameActivity extends Activity{
     	
     	pv.setCoordinate(x_array, y_array);
     	pv.setMask(mask_array);
+    	//pv.setLatch(1);
+    	latch = new CountDownLatch(1);
     	pv.loadPuzzle(image, x, path(puzzle, x.toString()));
     	pv.initServerClient();
  		pv.setContext(this);
